@@ -79,7 +79,6 @@ feather_flw %>%
   geom_line()
 
 feather_flow <- cdec_clean_flow(feather_flw, 'FEATHER')
-
 use_data(feather_flow)
 
 feather_tmp %>%
@@ -88,7 +87,6 @@ feather_tmp %>%
   geom_line()
 
 feather_temp <- cdec_clean_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER')
-
 use_data(feather_temp)
 
 # Tuolumne	2007	2017-----
@@ -101,9 +99,7 @@ tuol_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11290000', parameterCd = '0
                                       startDate = '2007-01-01', endDate = '2017-12-31', statCd = c('00001', '00002', '00008'))
 
 tuol_flow <- usgs_clean_flow(tuol_flw, 'TUOLUMNE')
-
 ggplot(tuol_flow, aes(date, mean_flow_cfs)) + geom_line()
-
 use_data(tuol_flow)
 
 tuol_tmp %>%
@@ -144,7 +140,6 @@ amer_flw %>%
 
 amer_flow <- usgs_clean_flow(amer_flw, 'AMERICAN')
 ggplot(amer_flow, aes(date, mean_flow_cfs)) + geom_col()
-
 use_data(amer_flow)
 
 amer_temp <- amer_tmp %>%
@@ -163,6 +158,16 @@ use_data(amer_temp)
 # Battle	1998	2016------
 # USGS 11376550 BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA
 # Discharge, cubic feet per second 	 1961-10-01 	 2018-04-16
+battle_flw <- dataRetrieval::readNWISdv(siteNumbers = '11376550', parameterCd = '00060',
+                                        startDate = '1998-01-01', endDate = '2016-12-31')
+
+battle_flw %>%
+  ggplot(aes(Date, X_00060_00003)) +
+  geom_line()
+
+battle_flow <- usgs_clean_flow(battle_flw, 'BATTLE')
+ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
+use_data(battle_flow)
 
 # Clear	1998	2016------
 # USGS 11372000 CLEAR C NR IGO CA
@@ -171,17 +176,85 @@ use_data(amer_temp)
 # CDEC CLEAR CREEK NEAR IGO - IGO
 # flow 09/06/1996 to present
 # temp 09/06/1996 to present
+clear_flw <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '20', dur_code = 'H',
+                                        start_date = '1998-01-01', end_date = '2016-12-31')
+
+clear_tmp <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '25', dur_code = 'H',
+                                        start_date = '1998-01-01', end_date = '2016-12-31')
+
+clear_flw %>%
+  filter(between(parameter_value, 0, 10000)) %>%
+  ggplot(aes(datetime, parameter_value)) +
+  geom_line()
+
+clear_flow <- cdec_clean_flow(filter(clear_flw, between(parameter_value, 0, 10000)), 'CLEAR')
+use_data(clear_flow)
+
+clear_tmp %>%
+  filter(between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')) %>%
+  group_by(date = as_date(datetime)) %>%
+  summarise(tt = mean(parameter_value, na.rm = TRUE)) %>%
+  ggplot(aes(x = date, y = tt)) +
+  geom_col()
+
+clear_temp <- cdec_clean_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
+ggplot(clear_temp, aes(date, mean_temp_C)) + geom_line()
+use_data(clear_temp)
 
 # Mok	1999	2015-----
 # USGS 11323500 MOKELUMNE R BL CAMANCHE DAM CA
 # Discharge, cubic feet per second 	 1904-10-01 	 2017-09-30
 # water temp EBMUD Victor, CA
+moke_flw <- dataRetrieval::readNWISdv(siteNumbers = '11323500', parameterCd = '00060',
+                                      startDate = '1999-01-01', endDate = '2015-12-31')
+
+moke_flw %>%
+  ggplot(aes(Date, X_00060_00003)) +
+  geom_line()
+
+moke_flow <- usgs_clean_flow(moke_flw, 'MOKELUMNE')
+ggplot(moke_flow, aes(date, mean_flow_cfs)) + geom_col()
+use_data(moke_flow)
+
+victor <- read_csv('data-raw/Victor15min.csv')
+
+
+victor_mean_temps <- victor %>%
+  mutate(date = as.Date(Time, '%H:%M:%S %m/%d/%Y')) %>%
+  group_by(year = year(date), month = month(date), day = days_in_month(date)) %>%
+  summarise(mean_water_temp_c = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(date = ymd(paste(year, month, day, sep = '-'))) %>%
+  select(date, mean_water_temp_c)
 
 # Stan	1998	2016-----
 # USGS 11303000 STANISLAUS R A RIPON CA
 # Temperature, water, degrees Celsius 	 1985-07-01 	 2018-04-17
 # Discharge, cubic feet per second 	 1940-10-01 	 2018-04-16
+stan_flw <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '00060',
+                                      startDate = '1998-01-01', endDate = '2016-12-31')
+stan_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '00010',
+                                      startDate = '1998-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
 
+stan_flw %>%
+  ggplot(aes(Date, X_00060_00003)) +
+  geom_line()
+stan_flow <- usgs_clean_flow(moke_flw, 'STANISLAUS')
+ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
+use_data(stan_flow)
+
+stan_temp <- stan_tmp %>%
+  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
+  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
+  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
+  mutate(date = ymd(paste(year, month, day))) %>%
+  ungroup() %>%
+  select(-year, -month, -day) %>%
+  mutate(md = ifelse(is.nan(md), (mx + mn)/2, md), screw_trap = 'STANISLAUS') %>%
+  select(date, mean_temp_C = md, screw_trap)
+
+ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
+use_data(stan_temp)
 
 # Chipps Trawl 	2008	2011 ***********
 # (corrected assignments)
