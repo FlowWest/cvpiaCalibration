@@ -33,9 +33,9 @@ cdec_clean_temp <- function(df, scrw_trp) {
     select(date, mean_temp_C, screw_trap)
 }
 
-# SCREW TRAP ***********
-#
-# RBDD	1999	2016
+# Obtain flow and temperature data at screw trap locations-----
+
+# RBDD	1999	2016------
 # CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM - RDB
 # temp 11/13/1989 to present
 rbdd_tmp <- CDECRetrieve::cdec_query(station = 'RDB', sensor_num = '25', dur_code = 'H',
@@ -187,8 +187,8 @@ clear_flw %>%
   ggplot(aes(datetime, parameter_value)) +
   geom_line()
 
-clear_flow <- cdec_clean_flow(filter(clear_flw, between(parameter_value, 0, 10000)), 'CLEAR')
-use_data(clear_flow)
+clear_flow <- cdec_clean_flow(filter(clear_flw, between(parameter_value, 0, 10000), year(datetime) > 1997), 'CLEAR')
+use_data(clear_flow, overwrite = TRUE)
 
 clear_tmp %>%
   filter(between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')) %>%
@@ -218,14 +218,17 @@ use_data(moke_flow)
 
 victor <- read_csv('data-raw/Victor15min.csv')
 
-
-victor_mean_temps <- victor %>%
+moke_temp <- victor %>%
   mutate(date = as.Date(Time, '%H:%M:%S %m/%d/%Y')) %>%
   group_by(year = year(date), month = month(date), day = days_in_month(date)) %>%
-  summarise(mean_water_temp_c = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
+  summarise(mean_temp_C = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
   ungroup() %>%
-  mutate(date = ymd(paste(year, month, day, sep = '-'))) %>%
-  select(date, mean_water_temp_c)
+  mutate(date = ymd(paste(year, month, day, sep = '-')), screw_trap = 'MOKELUMNE') %>%
+  filter(year > 1998) %>%
+  select(date, mean_temp_C, screw_trap)
+
+ggplot(moke_temp, aes(date, mean_temp_C)) + geom_line()
+use_data(moke_temp, overwrite = TRUE)
 
 # Stan	1998	2016-----
 # USGS 11303000 STANISLAUS R A RIPON CA
@@ -235,13 +238,13 @@ stan_flw <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '0
                                       startDate = '1998-01-01', endDate = '2016-12-31')
 stan_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '00010',
                                       startDate = '1998-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
-
+stan_flow %>% tail
 stan_flw %>%
   ggplot(aes(Date, X_00060_00003)) +
   geom_line()
-stan_flow <- usgs_clean_flow(moke_flw, 'STANISLAUS')
+stan_flow <- usgs_clean_flow(stan_flw, 'STANISLAUS')
 ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
-use_data(stan_flow)
+use_data(stan_flow, overwrite = TRUE)
 
 stan_temp <- stan_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
