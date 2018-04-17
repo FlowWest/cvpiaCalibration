@@ -6,3 +6,12 @@
 # install.packages('devtools')
 devtools::install_github('FlowWest/cvpiaCalibration')
 ```
+
+#### Usage
+``` r
+# view documentation about fall habitat values
+?fall_habitats
+
+# access American River monthly mean temperature values
+cvpiaCalibration::amer_temp
+```
