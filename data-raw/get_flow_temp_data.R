@@ -86,8 +86,36 @@ feather_tmp %>%
   ggplot(aes(x = datetime, y = parameter_value)) +
   geom_line()
 
-feather_temp <- cdec_clean_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER')
-use_data(feather_temp)
+fther_temp <- cdec_clean_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER')
+fther_temp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+fther_temp %>%
+  filter(year(date) == 2003 | year(date) == 2006)
+days_in_month(seq(as.Date('2006-10-01'), as.Date('2006-12-31'), by = 'month'))
+
+missing_feather <- tibble(month = c(1:2, 10:12),
+       year = c(rep(2003, 2), rep(2006, 3)),
+       day = c(31, 28, 31, 30, 31 ),
+       date = ymd(paste(year, month, day)),
+       mean_temp_C = as.numeric(NA),
+       screw_trap = 'FEATHER') %>%
+  select(date, mean_temp_C, screw_trap)
+
+fthr_tmp <- fther_temp %>%
+  bind_rows(missing_feather) %>%
+  arrange(date)
+
+ts_fthr <- ts(fthr_tmp$mean_temp_C, start = c(2003, 1), end = c(2006, 12), frequency = 12)
+
+na.interp(ts_fthr) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_fthr, series = 'Original')
+
+feather_temp <- fthr_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_fthr)), mean_temp_C))
+
+use_data(feather_temp, overwrite = TRUE)
 
 # Tuolumne	2007	2017-----
 # USGS 11290000 TUOLUMNE R A MODESTO CA
@@ -113,7 +141,7 @@ tuol_tmp %>%
   ggplot(aes(x=date, y=temp, color = stat)) +
   geom_line()
 
-tuol_temp <- tuol_tmp %>%
+tu_tmp <- tuol_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
   group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
   summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
@@ -123,7 +151,32 @@ tuol_temp <- tuol_tmp %>%
   mutate(md = ifelse(is.nan(md), (mx + mn)/2, md), screw_trap = 'TUOLUMNE') %>%
   select(date, mean_temp_C = md, screw_trap)
 
-use_data(tuol_temp)
+tu_tmp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+tu_tmp %>%
+  filter(year(date) == 2010)
+
+
+missing_tuol <- tibble(date = c(as.Date('2010-05-31'), as.Date('2010-11-30'), as.Date('2010-12-31')),
+                       mean_temp_C = as.numeric(NA),
+                       screw_trap = 'TUOLUMNE')
+tu_tmp <- tu_tmp %>%
+  bind_rows(missing_tuol) %>%
+  arrange(date)
+
+ts_tuol <- ts(tu_tmp$mean_temp_C, start = c(2007, 1), end = c(2017, 12), frequency = 12)
+
+na.interp(ts_tuol) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_tuol, series = 'Original')
+
+tuol_temp <- tu_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_tuol)), mean_temp_C))
+
+ggplot(tuol_temp, aes(date, mean_temp_C)) + geom_col()
+
+use_data(tuol_temp, overwrite = TRUE)
 
 # American	2013	2016-----
 # USGS 11446500 AMERICAN R A FAIR OAKS CA
@@ -197,9 +250,35 @@ clear_tmp %>%
   ggplot(aes(x = date, y = tt)) +
   geom_col()
 
-clear_temp <- cdec_clean_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
-ggplot(clear_temp, aes(date, mean_temp_C)) + geom_line()
-use_data(clear_temp)
+clr_tmp <- cdec_clean_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
+ggplot(clr_tmp, aes(date, mean_temp_C)) + geom_line()
+
+clr_tmp %>%
+  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
+
+clr_tmp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+clear_tmp <- clr_tmp %>%
+  bind_rows(tibble(date = battle_flow$date[!(battle_flow$date %in% clear_temp$date)],
+                   mean_temp_C = as.numeric(NA),
+                   screw_trap = 'CLEAR')) %>%
+  arrange(date)
+
+ts_clr <- ts(clear_tmp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+
+na.interp(ts_clr) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_clr, series = 'Original')
+
+clear_tmp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+clear_temp <- clear_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_clr)), mean_temp_C))
+
+use_data(clear_temp, overwrite = TRUE)
 
 # Mok	1999	2015-----
 # USGS 11323500 MOKELUMNE R BL CAMANCHE DAM CA
@@ -218,16 +297,27 @@ use_data(moke_flow)
 
 victor <- read_csv('data-raw/Victor15min.csv')
 
-moke_temp <- victor %>%
+moke_tmp <- victor %>%
   mutate(date = as.Date(Time, '%H:%M:%S %m/%d/%Y')) %>%
   group_by(year = year(date), month = month(date), day = days_in_month(date)) %>%
   summarise(mean_temp_C = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
   ungroup() %>%
   mutate(date = ymd(paste(year, month, day, sep = '-')), screw_trap = 'MOKELUMNE') %>%
-  filter(year > 1998) %>%
+  filter(year > 1998, year <2016) %>%
   select(date, mean_temp_C, screw_trap)
 
-ggplot(moke_temp, aes(date, mean_temp_C)) + geom_line()
+moke_tmp %>%
+  filter(is.nan(mean_temp_C))
+
+ts_mk <- ts(moke_tmp$mean_temp_C, start = c(1999, 1), end = c(2015, 12), frequency = 12)
+
+na.interp(ts_mk) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_mk, series = 'Original')
+
+moke_temp <- moke_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_mk)), mean_temp_C))
+
+ggplot(moke_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(moke_temp, overwrite = TRUE)
 
 # Stan	1998	2016-----
@@ -246,7 +336,7 @@ stan_flow <- usgs_clean_flow(stan_flw, 'STANISLAUS')
 ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(stan_flow, overwrite = TRUE)
 
-stan_temp <- stan_tmp %>%
+stn_tmp <- stan_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
   group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
   summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
@@ -256,8 +346,30 @@ stan_temp <- stan_tmp %>%
   mutate(md = ifelse(is.nan(md), (mx + mn)/2, md), screw_trap = 'STANISLAUS') %>%
   select(date, mean_temp_C = md, screw_trap)
 
+stn_tmp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+stn_tmp %>%
+  filter((year(date) == 2000 | year(date) == 2006) & month(date) >=9)
+
+missing_stan <- tibble(date = c(as.Date('2000-12-31'), as.Date('2006-09-30')),
+                       mean_temp_C = as.numeric(NA),
+                       screw_trap = 'STANISLAUS')
+st_tp <- stn_tmp %>%
+  bind_rows(missing_stan) %>%
+  arrange(date)
+
+ts_stan <- ts(st_tp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+
+na.interp(ts_stan) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_stan, series = 'Original')
+
+stan_temp <- st_tp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_stan)), mean_temp_C))
+
 ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
-use_data(stan_temp)
+use_data(stan_temp, overwrite = TRUE)
 
 # Chipps Trawl 	2008	2011 ***********
 # (corrected assignments)

@@ -1,24 +1,12 @@
 library(tidyverse)
 library(lubridate)
+library(forecast)
 
 # complete data sets----
-amer_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
-rbdd_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
 
-
-clear_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
-
-feather_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
-
-moke_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
-
-stan_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
-
+# need imputation----
 tuol_temp %>%
-  summarise(start = min(date), end = max(date), n(), mnths = (year(end) - year(start) + 1)* 12)
+  group_by(year(date)) %>%
+  summarise(n())
+
+
