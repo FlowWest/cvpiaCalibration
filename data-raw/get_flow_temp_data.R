@@ -2,6 +2,7 @@ library(tidyverse)
 library(dataRetrieval)
 library(CDECRetrieve)
 library(lubridate)
+library(stringr)
 
 # cdec flow = 20, temp = 25
 # USGS flow = 00060, temp = 00010
@@ -221,6 +222,54 @@ battle_flw %>%
 battle_flow <- usgs_clean_flow(battle_flw, 'BATTLE')
 ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(battle_flow)
+
+# mike wright 5q data
+cl_dates <- read_csv('data-raw/calLite_calSim_date_mapping.csv')
+
+battle_tmp <- read_csv('data-raw/tempmaster.csv', skip = 1) %>%
+  select(`5q_date`, `Battle Creek`) %>%
+  mutate(day_month = str_sub(`5q_date`, 1, 6),
+         year = str_sub(`5q_date`, 8, 9),
+         year = str_c('20', year),
+         date = dmy(paste(day_month, year))) %>%
+  select(-day_month, -year, -`5q_date`) %>%
+  group_by(year = year(date), month = month(date)) %>%
+  summarise(mean_temp_F = mean(`Battle Creek`, na.rm = TRUE),
+            mean_temp_C = (mean_temp_F - 32) * (5/9)) %>%
+  ungroup() %>%
+  mutate(cl_date = ymd(paste(year, month, 1)),
+         screw_trap = 'BATTLE') %>%
+  left_join(cl_dates) %>%
+  select(date = cs_date, mean_temp_C, screw_trap) %>%
+  filter(date >= as.Date('1998-01-01'))
+
+ggplot(battle_tmp, aes(date, mean_temp_C)) + geom_col()
+
+battle_tmp %>% tail
+
+battle_missing <- tibble(
+  date_seq = seq(as.Date('2003-10-01'), as.Date('2016-12-31'), by = 'month'),
+  day = days_in_month(date_seq),
+  date = ymd(paste(year(date_seq), month(date_seq), day)),
+  mean_temp_C = as.numeric(NA),
+  screw_trap = 'BATTLE') %>%
+  select(date, mean_temp_C, screw_trap)
+
+bt_tmp <- battle_tmp %>%
+  bind_rows(battle_missing) %>%
+  arrange(date)
+
+bt_ts <- ts(bt_tmp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+
+na.interp(bt_ts) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(bt_ts, series = 'Original')
+
+battle_temp <- bt_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(bt_ts)), mean_temp_C))
+
+ggplot(battle_temp, aes(date, mean_temp_C)) + geom_col()
+use_data(battle_temp)
+
 
 # Clear	1998	2016------
 # USGS 11372000 CLEAR C NR IGO CA
