@@ -124,3 +124,100 @@ NULL
 
 #' @rdname diversions
 "stan_tot_div"
+
+#' Monthly Mean Flow and Temperature
+#'
+#' Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
+#' for the duration of screw trap observations.
+#'
+#' @details
+#' Available screw trap data start and end years:
+#' \tabular{lll}{
+#'   \strong{Location} \tab \strong{start} \tab \strong{end}\cr
+#'   RBDD \tab 1999  \tab 2016\cr
+#'   Feather River\tab	1998 \tab	2016\cr
+#'   Tuolumne River\tab	2007 \tab	2017\cr
+#'   American River\tab	2013 \tab	2016\cr
+#'   Battle Creek\tab	1998 \tab	2016\cr
+#'   Clear Creek\tab	1998 \tab	2016\cr
+#'   Mokelumne River\tab	1999 \tab	2015\cr
+#'   Stanislaus River \tab	1998 \tab	2016
+#' }
+#'
+#' @section Flow and Temperature Gage IDs:
+#'
+#' \strong{Flow Gages:}
+#' \itemize{
+#'   \item RBDD (Upper Sacramento River) - USGS SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA (11377100)
+#'   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
+#'   \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
+#'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
+#'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
+#'   \item Clear Creek - CDEC CLEAR CREEK NEAR IGO (IGO)
+#'   \item Mokelumne River - USGS MOKELUMNE R BL CAMANCHE DAM CA (11323500)
+#'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
+#' }
+#'
+#' \strong{Temperature Gages:}
+#' \itemize{
+#'   \item RBDD (Upper Sacramento River) - CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM (RDB)
+#'   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
+#'   \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
+#'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
+#'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
+#'   \item Clear Creek  - CDEC CLEAR CREEK NEAR IGO (IGO)
+#'   \item Mokelumne River - EDMUD provided data near Victor CA
+#'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
+#' }
+#'
+#' @name flow_temperature
+#' @aliases NULL
+NULL
+
+#' @rdname flow_temperature
+"rbdd_flow"
+
+#' @rdname flow_temperature
+"feather_flow"
+
+#' @rdname flow_temperature
+"tuol_flow"
+
+#' @rdname flow_temperature
+"amer_flow"
+
+#' @rdname flow_temperature
+"moke_flow"
+
+#' @rdname flow_temperature
+"stan_flow"
+
+#' @rdname flow_temperature
+"battle_flow"
+
+#' @rdname flow_temperature
+"clear_flow"
+
+#' @rdname flow_temperature
+"rbdd_temp"
+
+#' @rdname flow_temperature
+"feather_temp"
+
+#' @rdname flow_temperature
+"tuol_temp"
+
+#' @rdname flow_temperature
+"amer_temp"
+
+#' @rdname flow_temperature
+"moke_temp"
+
+#' @rdname flow_temperature
+"stan_temp"
+
+#' @rdname flow_temperature
+"battle_temp"
+
+#' @rdname flow_temperature
+"clear_temp"
