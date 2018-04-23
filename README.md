@@ -14,4 +14,11 @@ devtools::install_github('FlowWest/cvpiaCalibration')
 
 # access American River monthly mean temperature values
 cvpiaCalibration::amer_temp
+
+# access American River proportion diverted
+cvpiaCalibration::amer_prop_div
+
+# access American River total diverted
+cvpiaCalibration::amer_tot_div
+
 ```
