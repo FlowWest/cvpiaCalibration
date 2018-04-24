@@ -26,6 +26,7 @@
 #'   American River\tab	2013 \tab	2016\cr
 #'   Battle Creek\tab	1998 \tab	2016\cr
 #'   Clear Creek\tab	1998 \tab	2016\cr
+#'   Deer Creek\tab 1992 \tab 2010\cr
 #'   Mokelumne River\tab	1999 \tab	2015\cr
 #'   Stanislaus River \tab	1998 \tab	2016
 #' }
@@ -64,6 +65,7 @@ NULL
 #'   American River\tab	2013 \tab	2016\cr
 #'   Battle Creek\tab	1998 \tab	2016\cr
 #'   Clear Creek\tab	1998 \tab	2016\cr
+#'   Deer Creek\tab 1992 \tab 2010\cr
 #'   Mokelumne River\tab	1999 \tab	2015\cr
 #'   Stanislaus River \tab	1998 \tab	2016
 #' }
@@ -108,6 +110,9 @@ NULL
 "stan_prop_div"
 
 #' @rdname diversions
+"deer_prop_div"
+
+#' @rdname diversions
 "rbdd_tot_div"
 
 #' @rdname diversions
@@ -125,6 +130,9 @@ NULL
 #' @rdname diversions
 "stan_tot_div"
 
+#' @rdname diversions
+"deer_tot_div"
+
 #' Monthly Mean Flow and Temperature
 #'
 #' Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
@@ -140,6 +148,7 @@ NULL
 #'   American River\tab	2013 \tab	2016\cr
 #'   Battle Creek\tab	1998 \tab	2016\cr
 #'   Clear Creek\tab	1998 \tab	2016\cr
+#'   Deer Creek\tab 1992 \tab 2010\cr
 #'   Mokelumne River\tab	1999 \tab	2015\cr
 #'   Stanislaus River \tab	1998 \tab	2016
 #' }
@@ -154,6 +163,7 @@ NULL
 #'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
 #'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
 #'   \item Clear Creek - CDEC CLEAR CREEK NEAR IGO (IGO)
+#'   \item Deer Creek - USGS DEER C NR VINA CA (11383500)
 #'   \item Mokelumne River - USGS MOKELUMNE R BL CAMANCHE DAM CA (11323500)
 #'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 #' }
@@ -166,9 +176,12 @@ NULL
 #'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
 #'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
 #'   \item Clear Creek  - CDEC CLEAR CREEK NEAR IGO (IGO)
+#'   \item Deer Creek - USGS DEER C NR VINA CA (11383500)
 #'   \item Mokelumne River - EDMUD provided data near Victor CA
 #'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 #' }
+#'
+#' \strong(NOTE:) Deer Creek temperature data begins in 1998
 #'
 #' @name flow_temperature
 #' @aliases NULL
@@ -199,6 +212,9 @@ NULL
 "clear_flow"
 
 #' @rdname flow_temperature
+"deer_flow"
+
+#' @rdname flow_temperature
 "rbdd_temp"
 
 #' @rdname flow_temperature
@@ -221,3 +237,6 @@ NULL
 
 #' @rdname flow_temperature
 "clear_temp"
+
+#' @rdname flow_temperature
+"deer_temp"

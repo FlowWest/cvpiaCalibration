@@ -3,6 +3,7 @@ library(dataRetrieval)
 library(CDECRetrieve)
 library(lubridate)
 library(stringr)
+library(devtools)
 
 # cdec flow = 20, temp = 25
 # USGS flow = 00060, temp = 00010
@@ -419,6 +420,39 @@ stan_temp <- st_tp %>%
 
 ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(stan_temp, overwrite = TRUE)
+
+# Deer 1992 2010
+# USGS 11383500 DEER C NR VINA CA
+# Temperature, water, degrees Celsius 	 1998-10-05 	 2018-04-24
+# Discharge, cubic feet per second 	 1911-10-01 	 2018-04-23
+deer_flw <- dataRetrieval::readNWISdv(siteNumbers = '11383500', parameterCd = '00060',
+                                      startDate = '1992-01-01', endDate = '2010-12-31')
+deer_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11383500', parameterCd = '00010',
+                                      startDate = '1992-01-01', endDate = '2010-12-31', statCd = c('00001', '00002'))
+
+deer_flw %>%
+  filter(X_00060_00003 < 10000) %>%
+  ggplot(aes(Date, X_00060_00003)) +
+  geom_line()
+deer_flow <- usgs_clean_flow(filter(deer_flw, X_00060_00003 < 10000), 'DEER')
+ggplot(deer_flow, aes(date, mean_flow_cfs)) + geom_col()
+use_data(deer_flow, overwrite = TRUE)
+
+
+deer_temp <- deer_tmp %>%
+  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002) %>%
+  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
+  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE)) %>%
+  mutate(date = ymd(paste(year, month, day))) %>%
+  ungroup() %>%
+  # select(-year, -month, -day) %>%
+  # gather(stat, temp, -date) %>%
+  # ggplot(aes(x = date, y = temp, color = stat)) + geom_line()
+  select(-year, -month, -day) %>%
+  mutate(md = (mx + mn)/2, screw_trap = 'DEER') %>%
+  select(date, mean_temp_C = md, screw_trap)
+
+use_data(deer_temp,overwrite = TRUE)
 
 # Chipps Trawl 	2008	2011 ***********
 # (corrected assignments)

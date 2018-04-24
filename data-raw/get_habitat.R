@@ -26,7 +26,7 @@ get_habitats <- function(df, species, watershed) {
                         fry = fry,
                         juv = juv,
                         fp = fp,
-                        screw_trap = watershed, stringsAsFactors = FALSE))
+                        screw_trap = watershed, stringsAsFactors = FALSE)
   return(habitat)
 }
 get_rbdd_habitat <- function(species) {
@@ -81,8 +81,10 @@ get_all_habitats <- function(species) {
   mokelumne_habitat <- get_habitats(cvpiaCalibration::moke_flow, species, 'Mokelumne River')
   # Stan	1998	2016
   stanislaus_habitat <- get_habitats(cvpiaCalibration::stan_flow, species, 'Stanislaus River')
+  # Deer 1992 2010
+  deer_habitat <- get_habitats(cvpiaCalibration::deer_flow, species, 'Deer Creek')
 
-  all_habitats <- bind_rows(rbdd_habitat, battle_habitat, clear_habitat, american_habitat,
+  all_habitats <- bind_rows(rbdd_habitat, battle_habitat, clear_habitat, deer_habitat, american_habitat,
             feather_habitat, mokelumne_habitat,
             stanislaus_habitat, tuolumne_habitat)
 
@@ -91,7 +93,7 @@ get_all_habitats <- function(species) {
 
 fall_habitats <- get_all_habitats('fr')
 
-use_data(fall_habitats)
+use_data(fall_habitats, overwrite = TRUE)
 
 # confirm that dates align and flow record is complete
 fall_habitats %>%
@@ -101,7 +103,7 @@ fall_habitats %>%
 # feather river missing 1998
 
 spring_habitats <- get_all_habitats('sr')
-use_data(spring_habitats)
+use_data(spring_habitats, overwrite = TRUE)
 
 steelhead_habitats <- get_all_habitats('st')
-use_data(steelhead_habitats)
+use_data(steelhead_habitats, overwrite = TRUE)

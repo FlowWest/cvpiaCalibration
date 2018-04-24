@@ -38,6 +38,7 @@ Available screw trap data start and end years:
   American River\tab	2013 \tab	2016\cr
   Battle Creek\tab	1998 \tab	2016\cr
   Clear Creek\tab	1998 \tab	2016\cr
+  Deer Creek\tab 1992 \tab 2010\cr
   Mokelumne River\tab	1999 \tab	2015\cr
   Stanislaus River \tab	1998 \tab	2016
 }

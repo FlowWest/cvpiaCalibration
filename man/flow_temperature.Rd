@@ -10,6 +10,7 @@
 \alias{stan_flow}
 \alias{battle_flow}
 \alias{clear_flow}
+\alias{deer_flow}
 \alias{rbdd_temp}
 \alias{feather_temp}
 \alias{tuol_temp}
@@ -18,6 +19,7 @@
 \alias{stan_temp}
 \alias{battle_temp}
 \alias{clear_temp}
+\alias{deer_temp}
 \title{Monthly Mean Flow and Temperature}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
 \usage{
@@ -37,6 +39,8 @@ battle_flow
 
 clear_flow
 
+deer_flow
+
 rbdd_temp
 
 feather_temp
@@ -52,6 +56,8 @@ stan_temp
 battle_temp
 
 clear_temp
+
+deer_temp
 }
 \description{
 Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
@@ -67,6 +73,7 @@ Available screw trap data start and end years:
   American River\tab	2013 \tab	2016\cr
   Battle Creek\tab	1998 \tab	2016\cr
   Clear Creek\tab	1998 \tab	2016\cr
+  Deer Creek\tab 1992 \tab 2010\cr
   Mokelumne River\tab	1999 \tab	2015\cr
   Stanislaus River \tab	1998 \tab	2016
 }
@@ -82,6 +89,7 @@ Available screw trap data start and end years:
   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
   \item Clear Creek - CDEC CLEAR CREEK NEAR IGO (IGO)
+  \item Deer Creek - USGS DEER C NR VINA CA (11383500)
   \item Mokelumne River - USGS MOKELUMNE R BL CAMANCHE DAM CA (11323500)
   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 }
@@ -94,9 +102,12 @@ Available screw trap data start and end years:
   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
   \item Clear Creek  - CDEC CLEAR CREEK NEAR IGO (IGO)
+  \item Deer Creek - USGS DEER C NR VINA CA (11383500)
   \item Mokelumne River - EDMUD provided data near Victor CA
   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 }
+
+\strong(NOTE:) Deer Creek temperature data begins in 1998
 }
 
 \keyword{datasets}

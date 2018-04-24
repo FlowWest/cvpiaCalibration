@@ -8,12 +8,14 @@
 \alias{amer_prop_div}
 \alias{moke_prop_div}
 \alias{stan_prop_div}
+\alias{deer_prop_div}
 \alias{rbdd_tot_div}
 \alias{feat_tot_div}
 \alias{tuol_tot_div}
 \alias{amer_tot_div}
 \alias{moke_tot_div}
 \alias{stan_tot_div}
+\alias{deer_tot_div}
 \title{Proportion and Total Diverted}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
 \usage{
@@ -29,6 +31,8 @@ moke_prop_div
 
 stan_prop_div
 
+deer_prop_div
+
 rbdd_tot_div
 
 feat_tot_div
@@ -40,6 +44,8 @@ amer_tot_div
 moke_tot_div
 
 stan_tot_div
+
+deer_tot_div
 }
 \description{
 Monthly propotion and total diverted values for the duration of screw trap observations.
@@ -54,6 +60,7 @@ Available screw trap data start and end years:
   American River\tab	2013 \tab	2016\cr
   Battle Creek\tab	1998 \tab	2016\cr
   Clear Creek\tab	1998 \tab	2016\cr
+  Deer Creek\tab 1992 \tab 2010\cr
   Mokelumne River\tab	1999 \tab	2015\cr
   Stanislaus River \tab	1998 \tab	2016
 }

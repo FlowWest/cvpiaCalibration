@@ -84,3 +84,12 @@ ggplot(stan_tot_div, aes(date, tot_div)) + geom_col()
 
 use_data(stan_tot_div, overwrite = TRUE)
 
+# Deer 1992 2010
+deer_tot_div <- deer_prop_div %>%
+  left_join(deer_flow) %>%
+  mutate(tot_div = mean_flow_cfs * prop_div) %>%
+  select(date, tot_div, screw_trap)
+
+ggplot(deer_tot_div, aes(date, tot_div)) + geom_col()
+
+use_data(deer_tot_div, overwrite = TRUE)
