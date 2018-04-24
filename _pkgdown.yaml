@@ -1,0 +1,71 @@
+title: cvpiaCalibration
+url: https://flowwest.github.io/cvpiaHabitat/
+template:
+  params:
+    bootswatch: paper
+
+home:
+  links:
+  - text: Fish and Wildlife Service's CVPIA website
+    href: https://www.fws.gov/lodi/anadromous_fish_restoration/afrp_index.htm
+  - text: Bureau of Reclamation's CVPIA website
+    href: https://www.usbr.gov/mp/cvpia/
+
+
+reference:
+- title: Habitat Datasets
+  desc: The spawning, instream rearing, and floodplain rearing habitat values at screw trap locations.
+  contents:
+  - fall_habitats
+  - spring_habitats
+  - steelhead_habitats
+- title: Temperature Datasets
+  desc: Measured monthly mean temperature (°C) from USGS and CDEC gages for the duration of screw trap observations.
+  contents:
+  - rbdd_temp
+  - feather_temp
+  - tuol_temp
+  - amer_temp
+  - moke_temp
+  - stan_temp
+  - battle_temp
+  - clear_temp
+  - deer_temp
+- title: Diversion Datasets
+  desc: Modeled monthly propotion and total diverted values for the duration of screw trap observations.
+  contents:
+  - rbdd_tot_div
+  - feat_tot_div
+  - tuol_tot_div
+  - amer_tot_div
+  - moke_tot_div
+  - stan_tot_div
+  - deer_tot_div
+  - rbdd_prop_div
+  - feat_prop_div
+  - tuol_prop_div
+  - amer_prop_div
+  - moke_prop_div
+  - stan_prop_div
+  - deer_prop_div
+- title: Flow Datasets
+  desc: Measured monthly mean flow (cfs) from USGS and CDEC gages for the duration of screw trap observations.
+  contents:
+  - rbdd_flow
+  - feather_flow
+  - tuol_flow
+  - amer_flow
+  - moke_flow
+  - stan_flow
+  - battle_flow
+  - clear_flow
+  - deer_flow
+
+navbar:
+  type: default
+  left:
+  - text: 'Reference'
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/flowwest/cvpiaCalibration

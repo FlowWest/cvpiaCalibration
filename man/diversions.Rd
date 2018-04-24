@@ -52,17 +52,17 @@ Monthly propotion and total diverted values for the duration of screw trap obser
 }
 \details{
 Available screw trap data start and end years:
-\tabular{lll}{
-  \strong{Location} \tab \strong{start} \tab \strong{end}\cr
-  RBDD \tab 1999  \tab 2016\cr
-  Feather River\tab	1998 \tab	2016\cr
-  Tuolumne River\tab	2007 \tab	2017\cr
-  American River\tab	2013 \tab	2016\cr
-  Battle Creek\tab	1998 \tab	2016\cr
-  Clear Creek\tab	1998 \tab	2016\cr
-  Deer Creek\tab 1992 \tab 2010\cr
-  Mokelumne River\tab	1999 \tab	2015\cr
-  Stanislaus River \tab	1998 \tab	2016
+\tabular{ll}{
+  \strong{Location} \tab \strong{start-end}\cr
+  RBDD \tab 1999 - 2016\cr
+  Feather River\tab	1998 - 2016\cr
+  Tuolumne River\tab	2007 - 2017\cr
+  American River\tab	2013 - 2016\cr
+  Battle Creek\tab	1998 - 2016\cr
+  Clear Creek\tab	1998 - 2016\cr
+  Deer Creek\tab 1992 - 2010\cr
+  Mokelumne River\tab	1999 - 2015\cr
+  Stanislaus River \tab	1998 - 2016
 }
 }
 \section{Proportion Diverted}{
@@ -76,7 +76,7 @@ For more details on CALSIM see:
   \item use this \href{https://flowwest.github.io/cvpiaFlow/reference/proportion_diverted.html}{link} if in a web browser
 }
 
-NOTE: RBDD is represented using the Upper Sacramento River DSM model node.
+\strong{NOTE:} RBDD is represented using the Upper Sacramento River DSM model node.
 There are no modeled diversions for Battle and Clear Creek.
 }
 
