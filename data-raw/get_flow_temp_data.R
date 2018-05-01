@@ -16,6 +16,16 @@ usgs_clean_flow <- function(df, scrw_trp) {
     select(date, mean_flow_cfs, screw_trap)
 }
 
+usgs_get_CV <- function(df, scrw_trp) {
+  df %>%
+    group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
+    summarise(sd = sd(X_00060_00003, na.rm = TRUE), mean = mean(X_00060_00003, na.rm = TRUE),
+              CV = sd/mean) %>%
+    mutate(date = ymd(paste(year, month, day)), screw_trap = scrw_trp) %>%
+    ungroup() %>%
+    select(date, CV, screw_trap)
+}
+
 cdec_clean_flow <- function(df, scrw_trp) {
   df %>%
     group_by(year =  year(datetime), month = month(datetime), day = days_in_month(datetime)) %>%
@@ -23,6 +33,16 @@ cdec_clean_flow <- function(df, scrw_trp) {
     mutate(date = ymd(paste(year, month, day)), screw_trap = scrw_trp) %>%
     ungroup() %>%
     select(date, mean_flow_cfs, screw_trap)
+}
+
+cdec_get_CV <- function(df, scrw_trp) {
+  df %>%
+    group_by(year =  year(datetime), month = month(datetime), day = days_in_month(datetime)) %>%
+    summarise(sd = sd(parameter_value, na.rm = TRUE), mean = mean(parameter_value, na.rm = TRUE),
+              CV = sd/mean) %>%
+    mutate(date = ymd(paste(year, month, day)), screw_trap = scrw_trp) %>%
+    ungroup() %>%
+    select(date, CV, screw_trap)
 }
 
 cdec_clean_temp <- function(df, scrw_trp) {
@@ -56,6 +76,8 @@ use_data(rbdd_temp, overwrite = TRUE)
 rbdd_flw <- dataRetrieval::readNWISdv(siteNumbers = '11377100', parameterCd = '00060',
                                        startDate = '1999-01-01', endDate = '2016-12-31')
 
+rbdd_cv <- usgs_get_CV(rbdd_flw, 'RBDD')
+
 rbdd_flw %>%
   ggplot(aes(x=Date, y=X_00060_00003)) +
   geom_line()
@@ -63,6 +85,7 @@ rbdd_flw %>%
 rbdd_flow <- usgs_clean_flow(rbdd_flw, 'RBDD')
 
 use_data(rbdd_flow)
+use_data(rbdd_cv)
 
 # Feather	1998	2016------
 # CDEC FEATHER RIVER NEAR GRIDLEY - GRL
@@ -81,7 +104,12 @@ feather_flw %>%
   geom_line()
 
 feather_flow <- cdec_clean_flow(feather_flw, 'FEATHER')
+feather_cv <- cdec_get_CV(feather_flw, 'FEATHER')
+
 use_data(feather_flow)
+use_data(feather_cv)
+
+ggplot(feather_cv, aes(date, CV)) + geom_line()
 
 feather_tmp %>%
   filter(between(parameter_value, 40, 100)) %>%
