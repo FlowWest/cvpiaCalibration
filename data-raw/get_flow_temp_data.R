@@ -160,6 +160,9 @@ tuol_flow <- usgs_clean_flow(tuol_flw, 'TUOLUMNE')
 ggplot(tuol_flow, aes(date, mean_flow_cfs)) + geom_line()
 use_data(tuol_flow)
 
+tuol_cv <- usgs_get_CV(tuol_flw, 'TUOLUMNE')
+use_data(tuol_cv)
+
 tuol_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
   group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
@@ -225,6 +228,9 @@ amer_flow <- usgs_clean_flow(amer_flw, 'AMERICAN')
 ggplot(amer_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(amer_flow)
 
+amer_cv <- usgs_get_CV(amer_flw, 'AMERICAN')
+use_data(amer_cv)
+
 amer_temp <- amer_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
   group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
@@ -251,6 +257,9 @@ battle_flw %>%
 battle_flow <- usgs_clean_flow(battle_flw, 'BATTLE')
 ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(battle_flow)
+
+battle_cv <- usgs_get_CV(battle_flw, 'BATTLE')
+use_data(battle_cv)
 
 # mike wright 5q data
 cl_dates <- read_csv('data-raw/calLite_calSim_date_mapping.csv')
@@ -321,6 +330,9 @@ clear_flw %>%
 clear_flow <- cdec_clean_flow(filter(clear_flw, between(parameter_value, 0, 10000), year(datetime) > 1997), 'CLEAR')
 use_data(clear_flow, overwrite = TRUE)
 
+clear_cv <- cdec_get_CV(clear_flw, 'CLEAR')
+use_data(clear_cv)
+
 clear_tmp %>%
   filter(between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')) %>%
   group_by(date = as_date(datetime)) %>%
@@ -373,6 +385,9 @@ moke_flow <- usgs_clean_flow(moke_flw, 'MOKELUMNE')
 ggplot(moke_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(moke_flow)
 
+moke_cv <- usgs_get_CV(moke_flw, 'MOKELUMNE')
+use_data(moke_cv)
+
 victor <- read_csv('data-raw/Victor15min.csv')
 
 moke_tmp <- victor %>%
@@ -413,6 +428,9 @@ stan_flw %>%
 stan_flow <- usgs_clean_flow(stan_flw, 'STANISLAUS')
 ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(stan_flow, overwrite = TRUE)
+
+stan_cv <- usgs_get_CV(stan_flw, 'STANISLAUS')
+use_data(stan_cv)
 
 stn_tmp <- stan_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
@@ -466,6 +484,8 @@ deer_flow <- usgs_clean_flow(filter(deer_flw, X_00060_00003 < 10000), 'DEER')
 ggplot(deer_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(deer_flow, overwrite = TRUE)
 
+deer_cv <- usgs_get_CV(deer_flw, 'DEER')
+use_data(deer_cv)
 
 deer_temp <- deer_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002) %>%

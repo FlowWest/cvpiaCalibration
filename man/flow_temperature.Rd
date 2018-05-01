@@ -20,7 +20,16 @@
 \alias{battle_temp}
 \alias{clear_temp}
 \alias{deer_temp}
-\title{Monthly Mean Flow and Temperature}
+\alias{rbdd_cv}
+\alias{feather_cv}
+\alias{tuol_cv}
+\alias{amer_cv}
+\alias{moke_cv}
+\alias{stan_cv}
+\alias{battle_cv}
+\alias{clear_cv}
+\alias{deer_cv}
+\title{Monthly Mean Flow, Flow Coefficient of Variation, and Temperature}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
 \usage{
 rbdd_flow
@@ -58,10 +67,29 @@ battle_temp
 clear_temp
 
 deer_temp
+
+rbdd_cv
+
+feather_cv
+
+tuol_cv
+
+amer_cv
+
+moke_cv
+
+stan_cv
+
+battle_cv
+
+clear_cv
+
+deer_cv
 }
 \description{
 Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
-for the duration of screw trap observations.
+for the duration of screw trap observations. The coefficient of variation (CV=sd/mean)
+for monthly flow was also calculated.
 }
 \details{
 Available screw trap data start and end years:
