@@ -300,6 +300,7 @@ ggplot(amer_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(amer_temp)
 
 
+
 # Battle	1998	2016------
 # USGS 11376550 BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA
 # Discharge, cubic feet per second 	 1961-10-01 	 2018-04-16
@@ -366,6 +367,7 @@ battle_temp <- bt_tmp %>%
 
 ggplot(battle_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(battle_temp)
+
 
 
 
@@ -438,6 +440,7 @@ clear_temp <- clear_tmp %>%
 use_data(clear_temp, overwrite = TRUE)
 
 
+
 # Mok	1999	2015-----
 # USGS 11323500 MOKELUMNE R BL CAMANCHE DAM CA
 # Discharge, cubic feet per second 	 1904-10-01 	 2017-09-30
@@ -445,6 +448,9 @@ use_data(clear_temp, overwrite = TRUE)
 moke_flw <- dataRetrieval::readNWISdv(siteNumbers = '11323500', parameterCd = '00060',
                                       startDate = '1999-01-01', endDate = '2015-12-31')
 
+
+moke_daily_flow <- usgs_clean_daily_flow(moke_flw, 'MOKELUMNE')
+use_data(moke_daily_flow)
 moke_flw %>%
   ggplot(aes(Date, X_00060_00003)) +
   geom_line()
@@ -464,8 +470,18 @@ moke_tmp <- victor %>%
   summarise(mean_temp_C = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
   ungroup() %>%
   mutate(date = ymd(paste(year, month, day, sep = '-')), screw_trap = 'MOKELUMNE') %>%
-  filter(year > 1998, year <2016) %>%
+  filter(year > 1998, year < 2016) %>%
   select(date, mean_temp_C, screw_trap)
+
+moke_daily_temp <- victor %>%
+  group_by(date = as.Date(Time, '%H:%M:%S %m/%d/%Y')) %>%
+  summarise(mean_daily_tempC = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
+  filter(between(year(date), 1998, 2015)) %>%
+  ungroup() %>%
+  mutate(screw_trap = 'MOKELUMNE') %>%
+  select(date, mean_daily_tempC, screw_trap)
+
+use_data(moke_daily_temp)
 
 moke_tmp %>%
   filter(is.nan(mean_temp_C))
@@ -480,6 +496,8 @@ moke_temp <- moke_tmp %>%
 
 ggplot(moke_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(moke_temp, overwrite = TRUE)
+
+
 
 
 # Stan	1998	2016-----
@@ -500,6 +518,15 @@ use_data(stan_flow, overwrite = TRUE)
 
 stan_cv <- usgs_get_CV(stan_flw, 'STANISLAUS')
 use_data(stan_cv)
+
+stan_daily_flow <- usgs_clean_daily_flow(stan_flw, 'STANISLAUS')
+use_data(stan_daily_flow)
+
+stan_daily_temp <- stan_tmp %>%
+  mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'STANISLAUS') %>%
+  select(date = Date, mean_daily_tempC, screw_trap)
+
+use_data(stan_daily_temp)
 
 stn_tmp <- stan_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
@@ -536,7 +563,8 @@ stan_temp <- st_tp %>%
 ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(stan_temp, overwrite = TRUE)
 
-# Deer 1992 2010
+
+# Deer 1992 2010 ---------
 # USGS 11383500 DEER C NR VINA CA
 # Temperature, water, degrees Celsius 	 1998-10-05 	 2018-04-24
 # Discharge, cubic feet per second 	 1911-10-01 	 2018-04-23
@@ -552,6 +580,15 @@ deer_flw %>%
 deer_flow <- usgs_clean_monthly_flow(filter(deer_flw, X_00060_00003 < 10000), 'DEER')
 ggplot(deer_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(deer_flow, overwrite = TRUE)
+
+deer_daily_flow <- usgs_clean_daily_flow(filter(deer_flw, X_00060_00003 < 10000), 'DEER')
+use_data(deer_daily_flow)
+
+deer_daily_temp <- deer_tmp %>%
+  mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'DEER') %>%
+  select(date = Date, mean_daily_tempC, screw_trap)
+
+use_data(deer_daily_temp)
 
 deer_cv <- usgs_get_CV(deer_flw, 'DEER')
 use_data(deer_cv)
