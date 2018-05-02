@@ -185,6 +185,10 @@ NULL
 #'
 #' \strong{NOTE:} Deer Creek temperature data begins in 1998
 #'
+#' @section Daily Data:
+#' Daily data for flow and temperature are also available: \code{[watershed]_daily_flow}
+#' or  \code{[watershed]_daily_temp}
+#'
 #' @name flow_temperature
 #' @aliases NULL
 NULL

@@ -19,7 +19,7 @@ reference:
   - fall_habitats
   - spring_habitats
   - steelhead_habitats
-- title: Temperature Datasets
+- title: Flow and Temperature Datasets
   desc: Measured monthly mean temperature (°C) from USGS and CDEC gages for the duration of screw trap observations.
   contents:
   - rbdd_temp
@@ -48,18 +48,6 @@ reference:
   - moke_prop_div
   - stan_prop_div
   - deer_prop_div
-- title: Flow Datasets
-  desc: Measured monthly mean flow (cfs) from USGS and CDEC gages for the duration of screw trap observations.
-  contents:
-  - rbdd_flow
-  - feather_flow
-  - tuol_flow
-  - amer_flow
-  - moke_flow
-  - stan_flow
-  - battle_flow
-  - clear_flow
-  - deer_flow
 
 navbar:
   type: default
