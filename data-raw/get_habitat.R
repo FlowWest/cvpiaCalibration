@@ -1,4 +1,5 @@
 library(tidyverse)
+library(devtools)
 library(lubridate)
 
 get_habitats <- function(df, species, watershed) {
@@ -38,18 +39,18 @@ get_rbdd_habitat <- function(species) {
                                        flow = flow, month = month)
   })
 
-  rbdd_instream_fry <- purrr::map2_dbl(mnths, flws, function(month, flow) {
+  rbdd_instream_fry <- purrr::map_dbl(flws, function(flow) {
     cvpiaHabitat::set_instream_habitat('Upper Sacramento River',
                                        species = species,
                                        life_stage = 'fry',
-                                       flow = flow, month = month)
+                                       flow = flow)
   })
 
-  rbdd_instream_juv <- purrr::map2_dbl(mnths, flws, function(month, flow) {
+  rbdd_instream_juv <- purrr::map_dbl(flws, function(flow) {
     cvpiaHabitat::set_instream_habitat('Upper Sacramento River',
                                        species = species,
                                        life_stage = 'juv',
-                                       flow = flow, month = month)
+                                       flow = flow)
   })
 
   rbdd_floodplain <- cvpiaHabitat::acres_to_square_meters(
@@ -107,3 +108,4 @@ use_data(spring_habitats, overwrite = TRUE)
 
 steelhead_habitats <- get_all_habitats('st')
 use_data(steelhead_habitats, overwrite = TRUE)
+
