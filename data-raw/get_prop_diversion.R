@@ -166,34 +166,10 @@ use_data(amer_prop_div)
 # NO diversions
 
 # Mok	1999	2015----
-cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Mokelumne River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  group_by(month = month(date)) %>%
-  mutate(filled = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         WY = ifelse(month(date) %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(filled2 = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div)) %>%
-  filter(between(year(date), 1999, 2015)) %>%
-  ggplot(aes(x = date, y = filled2, fill = Yr_type)) +
-  geom_col() +
-  geom_vline(xintercept = as.Date('2003-10-31'), size = 1) +
-  scale_fill_brewer(palette = 'RdPu') +
-  theme_dark()
-
-moke_prop_div <- cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Mokelumne River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2016-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  mutate(month = month(date), WY = ifelse(month %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         screw_trap = 'MOKELUMNE') %>%
-  filter(year(date) >= 1999) %>%
-  ungroup() %>%
+#using data from mokeulmnue
+moke_prop_div <- moke_flow %>%
+  left_join(moke_tot_div) %>%
+  mutate(prop_div = tot_div / mean_flow_cfs) %>%
   select(date, prop_div, screw_trap)
 
 use_data(moke_prop_div, overwrite = TRUE)

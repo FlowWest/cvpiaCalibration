@@ -84,9 +84,13 @@ NULL
 #' \strong{NOTE:} RBDD is represented using the Upper Sacramento River DSM model node.
 #' There are no modeled diversions for Battle and Clear Creek.
 #'
+#' Mokelumne data is measured provided by EDMUD
+#'
 #' @section Total Diverted:
 #' Values were estimated by multiplying the measured flow data and the modeled
 #' proportion diverted values.
+#'
+#' \strong{NOTE:} Mokelumne data is measured provided by EDMUD
 #'
 #' @name diversions
 #' @aliases NULL
