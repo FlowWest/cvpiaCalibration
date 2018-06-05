@@ -1,6 +1,7 @@
 library(cvpiaFlow)
 library(tidyverse)
 library(lubridate)
+library(readxl)
 library(forecast)
 library(waterYearType)
 library(devtools)
@@ -65,12 +66,55 @@ use_data(amer_tot_div, overwrite = TRUE)
 # NO diversions
 
 # Mok	1999	2015----
-moke_tot_div <- moke_prop_div %>%
-  left_join(moke_flow) %>%
-  mutate(tot_div = mean_flow_cfs * prop_div) %>%
-  select(date, tot_div, screw_trap)
+# CORRESPONDENCE *******
+# Attached are diversion data for the Lower Mokelumne River. I just summed the
+# acre feet and converted the acre foot per month to cfs
+# (Diversions_AF*0.016564351). Can you please put this in the CVPIA calibration
+# files? Also, are the diversion values in the calibration R package in cfs? So,
+# to get proportion water diverted I would simply divide the total water
+# diverted (in cfs) by the mean monthly flow, right?
 
-ggplot(moke_tot_div, aes(date, tot_div)) + geom_line()
+
+# One question we had: Did the Lodi water diversions not start till 2013 or was this information just not recorded until 2013?
+
+# I just read through a few reports and it looks like they completed
+# construction of the surface water treatment plant in November 2012. The report
+# states that they took 22 AF in November 2012 and 75 AF in December
+# 2012…probably for testing. I’m not sure why those #’s didn’t show up in our
+# database, but now you have them!
+
+readxl::excel_sheets('data-raw/lower_mokelumne_diversions.xlsx')
+
+lodi <- read_excel('data-raw/lower_mokelumne_diversions.xlsx', sheet = 'Lodi WTP (AF)', skip = 1)
+wid <- read_excel('data-raw/lower_mokelumne_diversions.xlsx', sheet = 'WID canal (AF)')
+rip <- read_excel('data-raw/lower_mokelumne_diversions.xlsx', sheet = 'Riparian diverters (AF)')
+
+moke <- bind_rows(lodi, wid, rip)
+glimpse(moke)
+
+acre_ft_per_day_to_cfs <- function(af_per_day) {
+  ft3_per_day <- af_per_day * 43560
+  cfs <- ft3_per_day / 60 / 60 / 24
+  return(cfs)
+}
+
+moke_tot_div <- moke %>%
+  select(station = Station, date = `Reading Date`, monthly_acre_ft = Reading) %>%
+  mutate(date = as.Date(date)) %>%
+  bind_rows(tibble(
+    station = 'Lodi WTP',
+    date = c(ymd('2012-11-30'), ymd('2012-12-31')),
+    monthly_acre_ft = c(22, 75)
+  )) %>%
+  spread(station, monthly_acre_ft) %>%
+  rename(lodi = `Lodi WTP`, rip = `Riparian and Appropriative Diverters`, wid = `Woodbridge Irrigation District Canal`) %>%
+  mutate(tot_div_acre_ft = ifelse(is.na(lodi), rip + wid, lodi + rip + wid),
+         acre_ft_per_day = tot_div_acre_ft/days_in_month(date),
+         cfs = acre_ft_per_day_to_cfs(acre_ft_per_day),
+         screw_trap = 'MOKELUMNE') %>%
+  select(date, tot_div = cfs, screw_trap)
+
+ggplot(moke_tot_div, aes(date, tot_div)) + geom_col()
 
 use_data(moke_tot_div, overwrite = TRUE)
 

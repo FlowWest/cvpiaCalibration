@@ -198,24 +198,6 @@ moke_prop_div <- cvpiaFlow::proportion_diverted %>%
 
 use_data(moke_prop_div, overwrite = TRUE)
 
-
-# Attached are diversion data for the Lower Mokelumne River. I just summed the
-# acre feet and converted the acre foot per month to cfs
-# (Diversions_AF*0.016564351). Can you please put this in the CVPIA calibration
-# files? Also, are the diversion values in the calibration R package in cfs? So,
-# to get proportion water diverted I would simply divide the total water
-# diverted (in cfs) by the mean monthly flow, right?
-
-
-# One question we had: Did the Lodi water diversions not start till 2013 or was this information just not recorded until 2013?
-
-# I just read through a few reports and it looks like they completed
-# construction of the surface water treatment plant in November 2012. The report
-# states that they took 22 AF in November 2012 and 75 AF in December
-# 2012…probably for testing. I’m not sure why those #’s didn’t show up in our
-# database, but now you have them!
-
-
 # Stan	1998	2016----
 cvpiaFlow::proportion_diverted %>%
   select(date, prop_div = `Stanislaus River`) %>%
