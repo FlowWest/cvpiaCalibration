@@ -138,9 +138,9 @@ NULL
 #' @rdname diversions
 "deer_tot_div"
 
-#' Monthly Mean Flow, Flow Coefficient of Variation, and Temperature
+#' Gaged Flow, Flow Coefficient of Variation, and Temperature
 #'
-#' Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
+#' Measured daily and monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
 #' for the duration of screw trap observations. The coefficient of variation (CV=sd/mean)
 #' for monthly flow was also calculated.
 #'
@@ -277,3 +277,55 @@ NULL
 
 #' @rdname flow_temperature
 "deer_cv"
+
+#' @rdname flow_temperature
+"rbdd_daily_flow"
+
+#' @rdname flow_temperature
+"feather_daily_flow"
+
+#' @rdname flow_temperature
+"tuol_daily_flow"
+
+#' @rdname flow_temperature
+"amer_daily_flow"
+
+#' @rdname flow_temperature
+"moke_daily_flow"
+
+#' @rdname flow_temperature
+"stan_daily_flow"
+
+#' @rdname flow_temperature
+"battle_daily_flow"
+
+#' @rdname flow_temperature
+"clear_daily_flow"
+
+#' @rdname flow_temperature
+"deer_daily_flow"
+
+#' @rdname flow_temperature
+"rbdd_daily_temp"
+
+#' @rdname flow_temperature
+"feather_daily_temp"
+
+#' @rdname flow_temperature
+"tuol_daily_temp"
+
+#' @rdname flow_temperature
+"amer_daily_temp"
+
+#' @rdname flow_temperature
+"moke_daily_temp"
+
+#' @rdname flow_temperature
+"stan_daily_temp"
+
+#' @rdname flow_temperature
+"clear_daily_temp"
+
+#' @rdname flow_temperature
+"deer_daily_temp"
+

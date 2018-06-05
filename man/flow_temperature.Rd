@@ -29,7 +29,24 @@
 \alias{battle_cv}
 \alias{clear_cv}
 \alias{deer_cv}
-\title{Monthly Mean Flow, Flow Coefficient of Variation, and Temperature}
+\alias{rbdd_daily_flow}
+\alias{feather_daily_flow}
+\alias{tuol_daily_flow}
+\alias{amer_daily_flow}
+\alias{moke_daily_flow}
+\alias{stan_daily_flow}
+\alias{battle_daily_flow}
+\alias{clear_daily_flow}
+\alias{deer_daily_flow}
+\alias{rbdd_daily_temp}
+\alias{feather_daily_temp}
+\alias{tuol_daily_temp}
+\alias{amer_daily_temp}
+\alias{moke_daily_temp}
+\alias{stan_daily_temp}
+\alias{clear_daily_temp}
+\alias{deer_daily_temp}
+\title{Gaged Flow, Flow Coefficient of Variation, and Temperature}
 \format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
 \usage{
 rbdd_flow
@@ -85,9 +102,43 @@ battle_cv
 clear_cv
 
 deer_cv
+
+rbdd_daily_flow
+
+feather_daily_flow
+
+tuol_daily_flow
+
+amer_daily_flow
+
+moke_daily_flow
+
+stan_daily_flow
+
+battle_daily_flow
+
+clear_daily_flow
+
+deer_daily_flow
+
+rbdd_daily_temp
+
+feather_daily_temp
+
+tuol_daily_temp
+
+amer_daily_temp
+
+moke_daily_temp
+
+stan_daily_temp
+
+clear_daily_temp
+
+deer_daily_temp
 }
 \description{
-Measured monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
+Measured daily and monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
 for the duration of screw trap observations. The coefficient of variation (CV=sd/mean)
 for monthly flow was also calculated.
 }

@@ -88,14 +88,14 @@ rbdd_tmp <- CDECRetrieve::cdec_query(station = 'RDB', sensor_num = '25', dur_cod
 filter(rbdd_tmp, parameter_value > 32) %>%
   ggplot(aes(x = datetime, y = parameter_value)) + geom_line()
 
-rbdd_temp_daily <- cdec_clean_daily_temp(filter(rbdd_tmp, parameter_value > 32), 'RBDD')
+rbdd_daily_temp <- cdec_clean_daily_temp(filter(rbdd_tmp, parameter_value > 32), 'RBDD')
 
-ggplot(rbdd_temp_daily, aes(date, mean_daily_tempC)) + geom_line()
+ggplot(rbdd_daily_temp, aes(date, mean_daily_tempC)) + geom_line()
 
 rbdd_temp <- cdec_clean_monthly_temp(filter(rbdd_tmp, parameter_value > 32, year(datetime) > 1998), 'RBDD')
 
 use_data(rbdd_temp, overwrite = TRUE)
-use_data(rbdd_temp_daily)
+use_data(rbdd_daily_temp, overwrite = TRUE)
 
 # USGS 11377100 SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA
 # Discharge, cubic feet per second 	 1891-10-01 	 2018-04-16
