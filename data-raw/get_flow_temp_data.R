@@ -24,15 +24,6 @@ usgs_clean_daily_flow <- function(df, scrw_trp) {
     mutate(screw_trap = scrw_trp)
 }
 
-usgs_get_CV <- function(df, scrw_trp) {
-  df %>%
-    group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
-    summarise(sd = sd(X_00060_00003, na.rm = TRUE), mean = mean(X_00060_00003, na.rm = TRUE),
-              CV = sd/mean) %>%
-    mutate(date = ymd(paste(year, month, day)), screw_trap = scrw_trp) %>%
-    ungroup() %>%
-    select(date, CV, screw_trap)
-}
 
 cdec_clean_monthly_flow <- function(df, scrw_trp) {
   df %>%
@@ -43,15 +34,6 @@ cdec_clean_monthly_flow <- function(df, scrw_trp) {
     select(date, mean_flow_cfs, screw_trap)
 }
 
-cdec_get_CV <- function(df, scrw_trp) {
-  df %>%
-    group_by(year =  year(datetime), month = month(datetime), day = days_in_month(datetime)) %>%
-    summarise(sd = sd(parameter_value, na.rm = TRUE), mean = mean(parameter_value, na.rm = TRUE),
-              CV = sd/mean) %>%
-    mutate(date = ymd(paste(year, month, day)), screw_trap = scrw_trp) %>%
-    ungroup() %>%
-    select(date, CV, screw_trap)
-}
 
 cdec_clean_monthly_temp <- function(df, scrw_trp) {
   df %>%
@@ -95,10 +77,8 @@ ggplot(filter(feather_flw, parameter_value > 0), aes(x = datetime, y = parameter
 
 feather_daily_flow <- cdec_clean_daily_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
 feather_flow <- cdec_clean_monthly_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
-feather_cv <- cdec_get_CV(feather_flw, 'FEATHER')
 
 use_data(feather_flow, overwrite = TRUE)
-use_data(feather_cv, overwrite = TRUE)
 use_data(feather_daily_flow, overwrite = TRUE)
 
 ggplot(filter(feather_tmp, between(parameter_value, 40, 100)), aes(x = datetime, y = parameter_value)) + geom_line()
@@ -161,9 +141,6 @@ amer_flow <- usgs_clean_monthly_flow(amer_flw, 'AMERICAN')
 ggplot(amer_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(amer_flow)
 
-amer_cv <- usgs_get_CV(amer_flw, 'AMERICAN')
-use_data(amer_cv)
-
 amer_daily_temp <- amer_tmp %>%
   mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'AMERICAN') %>%
   select(date = Date, mean_daily_tempC, screw_trap)
@@ -211,8 +188,6 @@ clear_flw %>%
 clear_flow <- cdec_clean_monthly_flow(filter(clear_flw, between(parameter_value, 0, 10000), year(datetime) > 1997), 'CLEAR')
 use_data(clear_flow, overwrite = TRUE)
 
-clear_cv <- cdec_get_CV(clear_flw, 'CLEAR')
-use_data(clear_cv)
 
 clear_tmp %>%
   filter(between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')) %>%
@@ -271,9 +246,6 @@ moke_flow <- usgs_clean_monthly_flow(moke_flw, 'MOKELUMNE')
 ggplot(moke_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(moke_flow)
 
-moke_cv <- usgs_get_CV(moke_flw, 'MOKELUMNE')
-use_data(moke_cv)
-
 victor <- read_csv('data-raw/Victor15min.csv')
 
 moke_tmp <- victor %>%
@@ -327,9 +299,6 @@ stan_flw %>%
 stan_flow <- usgs_clean_monthly_flow(stan_flw, 'STANISLAUS')
 ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(stan_flow, overwrite = TRUE)
-
-stan_cv <- usgs_get_CV(stan_flw, 'STANISLAUS')
-use_data(stan_cv)
 
 stan_daily_flow <- usgs_clean_daily_flow(stan_flw, 'STANISLAUS')
 use_data(stan_daily_flow)
@@ -406,8 +375,6 @@ ggplot(rbdd_temp, aes(date, mean_temp_C)) + geom_line()
 rbdd_flw <- dataRetrieval::readNWISdv(siteNumbers = '11377100', parameterCd = '00060',
                                       startDate = '1998-01-01', endDate = '2016-12-31')
 
-rbdd_cv <- usgs_get_CV(rbdd_flw, 'RBDD')
-
 rbdd_flw %>%
   ggplot(aes(x=Date, y=X_00060_00003)) +
   geom_line()
@@ -420,7 +387,6 @@ ggplot(rbdd_daily_flow, aes(date, flow_cfs)) + geom_line()
 
 # use_data(rbdd_daily_flow)
 # use_data(rbdd_flow)
-# use_data(rbdd_cv)
 
 
 # Tuolumne	2007	2017-----
@@ -440,8 +406,6 @@ use_data(tuol_flow, overwrite = TRUE)
 tuol_daily_flow <- usgs_clean_daily_flow(tuol_flw, 'TUOLUMNE')
 # use_data(tuol_daily_flow, overwrite = TRUE)
 
-tuol_cv <- usgs_get_CV(tuol_flw, 'TUOLUMNE')
-# use_data(tuol_cv, overwrite = TRUE)
 
 tuol_daily_temp <- tuol_tmp %>%
   mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'TUOLUMNE') %>%
@@ -515,8 +479,6 @@ battle_flow <- usgs_clean_monthly_flow(battle_flw, 'BATTLE')
 ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
 # use_data(battle_flow)
 
-battle_cv <- usgs_get_CV(battle_flw, 'BATTLE')
-# use_data(battle_cv)
 
 # mike wright 5q data
 cl_dates <- read_csv('data-raw/calLite_calSim_date_mapping.csv')
@@ -592,9 +554,6 @@ deer_daily_temp <- deer_tmp %>%
   select(date = Date, mean_daily_tempC, screw_trap)
 
 # use_data(deer_daily_temp)
-
-deer_cv <- usgs_get_CV(deer_flw, 'DEER')
-# use_data(deer_cv)
 
 deer_temp <- deer_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002) %>%
