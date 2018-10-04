@@ -20,13 +20,9 @@
 #'
 #' \tabular{ll}{
 #'   \strong{Location} \tab \strong{start-end}\cr
-#'   RBDD \tab 1999 - 2016\cr
 #'   Feather River\tab	1998 - 2016\cr
-#'   Tuolumne River\tab	2007 - 2017\cr
 #'   American River\tab	2013 - 2016\cr
-#'   Battle Creek\tab	1998 - 2016\cr
 #'   Clear Creek\tab	1998 - 2016\cr
-#'   Deer Creek\tab 1992 - 2010\cr
 #'   Mokelumne River\tab	1999 - 2015\cr
 #'   Stanislaus River \tab	1998 - 2016
 #' }
@@ -60,13 +56,9 @@ NULL
 #' Available screw trap data start and end years:
 #' \tabular{ll}{
 #'   \strong{Location} \tab \strong{start-end}\cr
-#'   RBDD \tab 1999 - 2016\cr
 #'   Feather River\tab	1998 - 2016\cr
-#'   Tuolumne River\tab	2007 - 2017\cr
 #'   American River\tab	2013 - 2016\cr
-#'   Battle Creek\tab	1998 - 2016\cr
 #'   Clear Creek\tab	1998 - 2016\cr
-#'   Deer Creek\tab 1992 - 2010\cr
 #'   Mokelumne River\tab	1999 - 2015\cr
 #'   Stanislaus River \tab	1998 - 2016
 #' }
@@ -81,8 +73,7 @@ NULL
 #'   \item use this \href{https://flowwest.github.io/cvpiaFlow/reference/proportion_diverted.html}{link} if in a web browser
 #' }
 #'
-#' \strong{NOTE:} RBDD is represented using the Upper Sacramento River DSM model node.
-#' There are no modeled diversions for Battle and Clear Creek.
+#' \strong{NOTE:} No major diversions to track for Clear Creek.
 #'
 #' Mokelumne data is measured provided by EDMUD
 #'
@@ -97,13 +88,7 @@ NULL
 NULL
 
 #' @rdname diversions
-"rbdd_prop_div"
-
-#' @rdname diversions
 "feat_prop_div"
-
-#' @rdname diversions
-"tuol_prop_div"
 
 #' @rdname diversions
 "amer_prop_div"
@@ -115,16 +100,7 @@ NULL
 "stan_prop_div"
 
 #' @rdname diversions
-"deer_prop_div"
-
-#' @rdname diversions
-"rbdd_tot_div"
-
-#' @rdname diversions
 "feat_tot_div"
-
-#' @rdname diversions
-"tuol_tot_div"
 
 #' @rdname diversions
 "amer_tot_div"
@@ -135,26 +111,19 @@ NULL
 #' @rdname diversions
 "stan_tot_div"
 
-#' @rdname diversions
-"deer_tot_div"
 
-#' Gaged Flow, Flow Coefficient of Variation, and Temperature
+#' Gaged Flow and Temperature
 #'
 #' Measured daily and monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
-#' for the duration of screw trap observations. The coefficient of variation (CV=sd/mean)
-#' for monthly flow was also calculated.
+#' for the duration of screw trap observations.
 #'
 #' @details
 #' Available screw trap data start and end years:
 #' \tabular{ll}{
 #'   \strong{Location} \tab \strong{start-end}\cr
-#'   RBDD \tab 1999 - 2016\cr
 #'   Feather River\tab	1998 - 2016\cr
-#'   Tuolumne River\tab	2007 - 2017\cr
 #'   American River\tab	2013 - 2016\cr
-#'   Battle Creek\tab	1998 - 2016\cr
 #'   Clear Creek\tab	1998 - 2016\cr
-#'   Deer Creek\tab 1992 - 2010\cr
 #'   Mokelumne River\tab	1999 - 2015\cr
 #'   Stanislaus River \tab	1998 - 2016
 #' }
@@ -163,31 +132,23 @@ NULL
 #'
 #' \strong{Flow Gages:}
 #' \itemize{
-#'   \item RBDD (Upper Sacramento River) - USGS SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA (11377100)
 #'   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
-#'   \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
 #'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
-#'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
 #'   \item Clear Creek - CDEC CLEAR CREEK NEAR IGO (IGO)
-#'   \item Deer Creek - USGS DEER C NR VINA CA (11383500)
 #'   \item Mokelumne River - USGS MOKELUMNE R BL CAMANCHE DAM CA (11323500)
 #'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 #' }
 #'
 #' \strong{Temperature Gages:}
 #' \itemize{
-#'   \item RBDD (Upper Sacramento River) - CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM (RDB)
 #'   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
-#'   \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
 #'   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
-#'   \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
 #'   \item Clear Creek  - CDEC CLEAR CREEK NEAR IGO (IGO)
-#'   \item Deer Creek - USGS DEER C NR VINA CA (11383500)
 #'   \item Mokelumne River - EDMUD provided data near Victor CA
 #'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 #' }
 #'
-#' \strong{NOTE:} Deer Creek temperature data begins in 1998
+#' \strong{NOTE:} Feather temperature data available 2003 - 2016
 #'
 #' @section Daily Data:
 #' Daily data for flow and temperature are also available: \code{[watershed]_daily_flow}
@@ -196,9 +157,6 @@ NULL
 #' @name flow_temperature
 #' @aliases NULL
 NULL
-
-#' @rdname flow_temperature
-"rbdd_flow"
 
 #' @rdname flow_temperature
 "feather_flow"
@@ -216,22 +174,10 @@ NULL
 "stan_flow"
 
 #' @rdname flow_temperature
-"battle_flow"
-
-#' @rdname flow_temperature
 "clear_flow"
 
 #' @rdname flow_temperature
-"deer_flow"
-
-#' @rdname flow_temperature
-"rbdd_temp"
-
-#' @rdname flow_temperature
 "feather_temp"
-
-#' @rdname flow_temperature
-"tuol_temp"
 
 #' @rdname flow_temperature
 "amer_temp"
@@ -243,49 +189,10 @@ NULL
 "stan_temp"
 
 #' @rdname flow_temperature
-"battle_temp"
-
-#' @rdname flow_temperature
 "clear_temp"
 
 #' @rdname flow_temperature
-"deer_temp"
-
-#' @rdname flow_temperature
-"rbdd_cv"
-
-#' @rdname flow_temperature
-"feather_cv"
-
-#' @rdname flow_temperature
-"tuol_cv"
-
-#' @rdname flow_temperature
-"amer_cv"
-
-#' @rdname flow_temperature
-"moke_cv"
-
-#' @rdname flow_temperature
-"stan_cv"
-
-#' @rdname flow_temperature
-"battle_cv"
-
-#' @rdname flow_temperature
-"clear_cv"
-
-#' @rdname flow_temperature
-"deer_cv"
-
-#' @rdname flow_temperature
-"rbdd_daily_flow"
-
-#' @rdname flow_temperature
 "feather_daily_flow"
-
-#' @rdname flow_temperature
-"tuol_daily_flow"
 
 #' @rdname flow_temperature
 "amer_daily_flow"
@@ -297,22 +204,10 @@ NULL
 "stan_daily_flow"
 
 #' @rdname flow_temperature
-"battle_daily_flow"
-
-#' @rdname flow_temperature
 "clear_daily_flow"
 
 #' @rdname flow_temperature
-"deer_daily_flow"
-
-#' @rdname flow_temperature
-"rbdd_daily_temp"
-
-#' @rdname flow_temperature
 "feather_daily_temp"
-
-#' @rdname flow_temperature
-"tuol_daily_temp"
 
 #' @rdname flow_temperature
 "amer_daily_temp"
@@ -325,7 +220,4 @@ NULL
 
 #' @rdname flow_temperature
 "clear_daily_temp"
-
-#' @rdname flow_temperature
-"deer_daily_temp"
 

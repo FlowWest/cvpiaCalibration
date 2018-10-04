@@ -5,6 +5,8 @@ library(lubridate)
 library(stringr)
 library(devtools)
 
+
+# helper functions ------------------------
 # cdec flow = 20, temp = 25
 # USGS flow = 00060, temp = 00010
 usgs_clean_monthly_flow <- function(df, scrw_trp) {
@@ -79,67 +81,25 @@ cdec_clean_daily_flow <- function(df, scrw_trp) {
 
 # Obtain flow and temperature data at screw trap locations-----
 
-# RBDD	1999	2016------
-# CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM - RDB
-# temp 11/13/1989 to present
-rbdd_tmp <- CDECRetrieve::cdec_query(station = 'RDB', sensor_num = '25', dur_code = 'H',
-                                      start_date = '1999-01-01', end_date = '2016-12-31')
-
-filter(rbdd_tmp, parameter_value > 32) %>%
-  ggplot(aes(x = datetime, y = parameter_value)) + geom_line()
-
-rbdd_daily_temp <- cdec_clean_daily_temp(filter(rbdd_tmp, parameter_value > 32), 'RBDD')
-
-ggplot(rbdd_daily_temp, aes(date, mean_daily_tempC)) + geom_line()
-
-rbdd_temp <- cdec_clean_monthly_temp(filter(rbdd_tmp, parameter_value > 32, year(datetime) > 1998), 'RBDD')
-
-use_data(rbdd_temp, overwrite = TRUE)
-use_data(rbdd_daily_temp, overwrite = TRUE)
-
-# USGS 11377100 SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA
-# Discharge, cubic feet per second 	 1891-10-01 	 2018-04-16
-rbdd_flw <- dataRetrieval::readNWISdv(siteNumbers = '11377100', parameterCd = '00060',
-                                       startDate = '1999-01-01', endDate = '2016-12-31')
-
-rbdd_cv <- usgs_get_CV(rbdd_flw, 'RBDD')
-
-rbdd_flw %>%
-  ggplot(aes(x=Date, y=X_00060_00003)) +
-  geom_line()
-
-rbdd_flow <- usgs_clean_monthly_flow(rbdd_flw, 'RBDD')
-
-rbdd_daily_flow <- usgs_clean_daily_flow(rbdd_flw, 'RBDD')
-
-ggplot(rbdd_daily_flow, aes(date, flow_cfs)) + geom_line()
-
-use_data(rbdd_daily_flow)
-use_data(rbdd_flow)
-use_data(rbdd_cv)
-
-
 # Feather	1998	2016------
 # CDEC FEATHER RIVER NEAR GRIDLEY - GRL
 # flow 01/05/1999 to present
 # temp 03/05/2003 to 06/01/2007
 feather_flw <- CDECRetrieve::cdec_query(station = 'GRL', sensor_num = '20', dur_code = 'H',
-                                         start_date = '1999-01-05', end_date = '2016-12-31')
+                                         start_date = '1997-01-05', end_date = '2016-12-31')
 
 feather_tmp <- CDECRetrieve::cdec_query(station = 'GRL', sensor_num = '25', dur_code = 'H',
                                          start_date = '2003-03-05', end_date = '2007-06-01')
 
 ggplot(filter(feather_flw, parameter_value > 0), aes(x = datetime, y = parameter_value)) + geom_line()
 
-feather_daily_flow <- cdec_clean_daily_temp(filter(feather_flw, parameter_value > 0), 'FEATHER')
+feather_daily_flow <- cdec_clean_daily_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
 feather_flow <- cdec_clean_monthly_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
 feather_cv <- cdec_get_CV(feather_flw, 'FEATHER')
 
-use_data(feather_flow)
-use_data(feather_cv)
-use_data(feather_daily_flow)
-
-ggplot(feather_cv, aes(date, CV)) + geom_line()
+use_data(feather_flow, overwrite = TRUE)
+use_data(feather_cv, overwrite = TRUE)
+use_data(feather_daily_flow, overwrite = TRUE)
 
 ggplot(filter(feather_tmp, between(parameter_value, 40, 100)), aes(x = datetime, y = parameter_value)) + geom_line()
 
@@ -147,7 +107,7 @@ feather_daily_temp <- cdec_clean_daily_temp(filter(feather_tmp, between(paramete
 
 ggplot(feather_daily_temp, aes(date, mean_daily_tempC)) + geom_col()
 
-use_data(feather_daily_temp)
+use_data(feather_daily_temp, overwrite = TRUE)
 
 fther_temp <- cdec_clean_monthly_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER')
 fther_temp %>%
@@ -179,82 +139,6 @@ feather_temp <- fthr_tmp %>%
   mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_fthr)), mean_temp_C))
 
 use_data(feather_temp, overwrite = TRUE)
-
-
-# Tuolumne	2007	2017-----
-# USGS 11290000 TUOLUMNE R A MODESTO CA
-# Temperature, water, degrees Celsius 	 1965-07-21 	 2018-04-17
-# Discharge, cubic feet per second 	 1895-01-01 	 2018-04-16
-tuol_flw <- dataRetrieval::readNWISdv(siteNumbers = '11290000', parameterCd = '00060',
-                                      startDate = '2007-01-01', endDate = '2017-12-31')
-tuol_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11290000', parameterCd = '00010',
-                                      startDate = '2007-01-01', endDate = '2017-12-31', statCd = c('00001', '00002', '00008'))
-
-tuol_flow <- usgs_clean_monthly_flow(tuol_flw, 'TUOLUMNE')
-ggplot(tuol_flow, aes(date, mean_flow_cfs)) + geom_line()
-use_data(tuol_flow)
-
-tuol_daily_flow <- usgs_clean_daily_flow(tuol_flw, 'TUOLUMNE')
-use_data(tuol_daily_flow)
-
-tuol_cv <- usgs_get_CV(tuol_flw, 'TUOLUMNE')
-use_data(tuol_cv)
-
-tuol_daily_temp <- tuol_tmp %>%
-  mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'TUOLUMNE') %>%
-  select(date = Date, mean_daily_tempC, screw_trap)
-
-use_data(tuol_daily_temp)
-
-tuol_tmp %>%
-  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
-  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
-  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
-  mutate(date = ymd(paste(year, month, day))) %>%
-  ungroup() %>%
-  select(-year, -month, -day) %>%
-  gather(stat, temp, -date) %>%
-  ggplot(aes(x=date, y=temp, color = stat)) +
-  geom_line()
-
-tu_tmp <- tuol_tmp %>%
-  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
-  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
-  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
-  mutate(date = ymd(paste(year, month, day))) %>%
-  ungroup() %>%
-  select(-year, -month, -day) %>%
-  mutate(md = ifelse(is.nan(md), (mx + mn)/2, md), screw_trap = 'TUOLUMNE') %>%
-  select(date, mean_temp_C = md, screw_trap)
-
-tu_tmp %>%
-  group_by(year(date)) %>%
-  summarise(n())
-
-tu_tmp %>%
-  filter(year(date) == 2010)
-
-
-missing_tuol <- tibble(date = c(as.Date('2010-05-31'), as.Date('2010-11-30'), as.Date('2010-12-31')),
-                       mean_temp_C = as.numeric(NA),
-                       screw_trap = 'TUOLUMNE')
-tu_tmp <- tu_tmp %>%
-  bind_rows(missing_tuol) %>%
-  arrange(date)
-
-ts_tuol <- ts(tu_tmp$mean_temp_C, start = c(2007, 1), end = c(2017, 12), frequency = 12)
-
-na.interp(ts_tuol) %>% autoplot(series = 'Interpolated') +
-  forecast::autolayer(ts_tuol, series = 'Original')
-
-tuol_temp <- tu_tmp %>%
-  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_tuol)), mean_temp_C))
-
-ggplot(tuol_temp, aes(date, mean_temp_C)) + geom_col()
-
-use_data(tuol_temp, overwrite = TRUE)
-
-
 
 # American	2013	2016-----
 # USGS 11446500 AMERICAN R A FAIR OAKS CA
@@ -299,78 +183,6 @@ amer_temp <- amer_tmp %>%
 ggplot(amer_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(amer_temp)
 
-
-
-# Battle	1998	2016------
-# USGS 11376550 BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA
-# Discharge, cubic feet per second 	 1961-10-01 	 2018-04-16
-battle_flw <- dataRetrieval::readNWISdv(siteNumbers = '11376550', parameterCd = '00060',
-                                        startDate = '1998-01-01', endDate = '2016-12-31')
-
-battle_daily_flow <- usgs_clean_daily_flow(battle_flw, 'BATTLE')
-use_data(battle_daily_flow)
-
-battle_flw %>%
-  ggplot(aes(Date, X_00060_00003)) +
-  geom_line()
-
-battle_flow <- usgs_clean_monthly_flow(battle_flw, 'BATTLE')
-ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
-use_data(battle_flow)
-
-battle_cv <- usgs_get_CV(battle_flw, 'BATTLE')
-use_data(battle_cv)
-
-# mike wright 5q data
-cl_dates <- read_csv('data-raw/calLite_calSim_date_mapping.csv')
-
-battle_tmp <- read_csv('data-raw/tempmaster.csv', skip = 1) %>%
-  select(`5q_date`, `Battle Creek`) %>%
-  mutate(day_month = str_sub(`5q_date`, 1, 6),
-         year = str_sub(`5q_date`, 8, 9),
-         year = str_c('20', year),
-         date = dmy(paste(day_month, year))) %>%
-  select(-day_month, -year, -`5q_date`) %>%
-  group_by(year = year(date), month = month(date)) %>%
-  summarise(mean_temp_F = mean(`Battle Creek`, na.rm = TRUE),
-            mean_temp_C = (mean_temp_F - 32) * (5/9)) %>%
-  ungroup() %>%
-  mutate(cl_date = ymd(paste(year, month, 1)),
-         screw_trap = 'BATTLE') %>%
-  left_join(cl_dates) %>%
-  select(date = cs_date, mean_temp_C, screw_trap) %>%
-  filter(date >= as.Date('1998-01-01'))
-
-ggplot(battle_tmp, aes(date, mean_temp_C)) + geom_col()
-
-battle_tmp %>% tail
-
-battle_missing <- tibble(
-  date_seq = seq(as.Date('2003-10-01'), as.Date('2016-12-31'), by = 'month'),
-  day = days_in_month(date_seq),
-  date = ymd(paste(year(date_seq), month(date_seq), day)),
-  mean_temp_C = as.numeric(NA),
-  screw_trap = 'BATTLE') %>%
-  select(date, mean_temp_C, screw_trap)
-
-bt_tmp <- battle_tmp %>%
-  bind_rows(battle_missing) %>%
-  arrange(date)
-
-bt_ts <- ts(bt_tmp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
-
-na.interp(bt_ts) %>% autoplot(series = 'Interpolated') +
-  forecast::autolayer(bt_ts, series = 'Original')
-
-battle_temp <- bt_tmp %>%
-  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(bt_ts)), mean_temp_C))
-
-ggplot(battle_temp, aes(date, mean_temp_C)) + geom_col()
-use_data(battle_temp)
-
-
-
-
 # Clear	1998	2016------
 # USGS 11372000 CLEAR C NR IGO CA
 # Temperature, water, degrees Celsius 	 1965-03-26 	 1979-01-28
@@ -379,13 +191,13 @@ use_data(battle_temp)
 # flow 09/06/1996 to present
 # temp 09/06/1996 to present
 clear_flw <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '20', dur_code = 'H',
-                                        start_date = '1998-01-01', end_date = '2016-12-31')
+                                        start_date = '1997-01-01', end_date = '2016-12-31')
 
 clear_tmp <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '25', dur_code = 'H',
-                                        start_date = '1998-01-01', end_date = '2016-12-31')
+                                        start_date = '1997-01-01', end_date = '2016-12-31')
 
 clear_daily_flow <- cdec_clean_daily_flow(clear_flw, 'CLEAR')
-use_data(clear_daily_flow)
+use_data(clear_daily_flow, overwrite = TRUE)
 
 clear_daily_temp <- cdec_clean_daily_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
 use_data(clear_daily_temp)
@@ -564,7 +376,198 @@ ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(stan_temp, overwrite = TRUE)
 
 
+### DATA FOR TRAPS WE AREN'T USING ### -----------------------------------------
+
+# RBDD	1999	2016------
+# Upper Sacramento not using because of location complications (too many tribs above)
+# CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM - RDB
+# temp 11/13/1989 to present
+rbdd_tmp <- CDECRetrieve::cdec_query(station = 'RDB', sensor_num = '25', dur_code = 'H',
+                                     start_date = '1998-01-01', end_date = '2016-12-31')
+
+rbdd_tmp %>% glimpse
+ggplot(rbdd_tmp, aes(x = year(datetime), y = parameter_value)) +
+  geom_boxplot()
+
+filter(rbdd_tmp, between(parameter_value, 40, 70)) %>%
+  ggplot(aes(x = datetime, y = parameter_value)) + geom_line()
+
+rbdd_daily_temp <- cdec_clean_daily_temp(filter(rbdd_tmp, between(parameter_value, 40, 70)), 'RBDD')
+ggplot(rbdd_daily_temp, aes(date, mean_daily_tempC)) + geom_line()
+
+rbdd_temp <- cdec_clean_monthly_temp(filter(rbdd_tmp, between(parameter_value, 40, 70), year(datetime) > 1997), 'RBDD')
+ggplot(rbdd_temp, aes(date, mean_temp_C)) + geom_line()
+
+# use_data(rbdd_temp, overwrite = TRUE)
+# use_data(rbdd_daily_temp, overwrite = TRUE)
+
+# USGS 11377100 SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA
+# Discharge, cubic feet per second 	 1891-10-01 	 2018-04-16
+rbdd_flw <- dataRetrieval::readNWISdv(siteNumbers = '11377100', parameterCd = '00060',
+                                      startDate = '1998-01-01', endDate = '2016-12-31')
+
+rbdd_cv <- usgs_get_CV(rbdd_flw, 'RBDD')
+
+rbdd_flw %>%
+  ggplot(aes(x=Date, y=X_00060_00003)) +
+  geom_line()
+
+rbdd_flow <- usgs_clean_monthly_flow(rbdd_flw, 'RBDD')
+
+rbdd_daily_flow <- usgs_clean_daily_flow(rbdd_flw, 'RBDD')
+
+ggplot(rbdd_daily_flow, aes(date, flow_cfs)) + geom_line()
+
+# use_data(rbdd_daily_flow)
+# use_data(rbdd_flow)
+# use_data(rbdd_cv)
+
+
+# Tuolumne	2007	2017-----
+# Not using trap because too few captures
+# USGS 11290000 TUOLUMNE R A MODESTO CA
+# Temperature, water, degrees Celsius 	 1965-07-21 	 2018-04-17
+# Discharge, cubic feet per second 	 1895-01-01 	 2018-04-16
+tuol_flw <- dataRetrieval::readNWISdv(siteNumbers = '11290000', parameterCd = '00060',
+                                      startDate = '2006-01-01', endDate = '2017-12-31')
+tuol_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11290000', parameterCd = '00010',
+                                      startDate = '2006-01-01', endDate = '2017-12-31', statCd = c('00001', '00002', '00008'))
+
+tuol_flow <- usgs_clean_monthly_flow(tuol_flw, 'TUOLUMNE')
+ggplot(tuol_flow, aes(date, mean_flow_cfs)) + geom_line()
+use_data(tuol_flow, overwrite = TRUE)
+
+tuol_daily_flow <- usgs_clean_daily_flow(tuol_flw, 'TUOLUMNE')
+# use_data(tuol_daily_flow, overwrite = TRUE)
+
+tuol_cv <- usgs_get_CV(tuol_flw, 'TUOLUMNE')
+# use_data(tuol_cv, overwrite = TRUE)
+
+tuol_daily_temp <- tuol_tmp %>%
+  mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'TUOLUMNE') %>%
+  select(date = Date, mean_daily_tempC, screw_trap)
+
+# use_data(tuol_daily_temp, overwrite = TRUE)
+
+tuol_tmp %>%
+  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
+  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
+  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
+  mutate(date = ymd(paste(year, month, day))) %>%
+  ungroup() %>%
+  select(-year, -month, -day) %>%
+  gather(stat, temp, -date) %>%
+  ggplot(aes(x=date, y=temp, color = stat)) +
+  geom_line()
+
+tu_tmp <- tuol_tmp %>%
+  select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
+  group_by(year = year(Date), month = month(Date), day = days_in_month(Date)) %>%
+  summarise(mx = mean(max_temp, na.rm = TRUE), mn = mean(min_temp, na.rm = TRUE), md = mean(med_temp, na.rm = TRUE)) %>%
+  mutate(date = ymd(paste(year, month, day))) %>%
+  ungroup() %>%
+  select(-year, -month, -day) %>%
+  mutate(md = ifelse(is.nan(md), (mx + mn)/2, md), screw_trap = 'TUOLUMNE') %>%
+  select(date, mean_temp_C = md, screw_trap)
+
+tu_tmp %>%
+  group_by(year(date)) %>%
+  summarise(n())
+
+tu_tmp %>%
+  filter(year(date) == 2010)
+
+missing_tuol <- tibble(date = c(as.Date('2010-05-31'), as.Date('2010-11-30'), as.Date('2010-12-31')),
+                       mean_temp_C = as.numeric(NA),
+                       screw_trap = 'TUOLUMNE')
+tu_tmp <- tu_tmp %>%
+  bind_rows(missing_tuol) %>%
+  arrange(date)
+
+ts_tuol <- ts(tu_tmp$mean_temp_C, start = c(2007, 1), end = c(2017, 12), frequency = 12)
+
+na.interp(ts_tuol) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(ts_tuol, series = 'Original')
+
+tuol_temp <- tu_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_tuol)), mean_temp_C))
+
+ggplot(tuol_temp, aes(date, mean_temp_C)) + geom_col()
+
+# use_data(tuol_temp, overwrite = TRUE)
+
+
+# Battle	1998	2016------
+# not using trap because no diversion data
+# USGS 11376550 BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA
+# Discharge, cubic feet per second 	 1961-10-01 	 2018-04-16
+battle_flw <- dataRetrieval::readNWISdv(siteNumbers = '11376550', parameterCd = '00060',
+                                        startDate = '1998-01-01', endDate = '2016-12-31')
+
+battle_daily_flow <- usgs_clean_daily_flow(battle_flw, 'BATTLE')
+# use_data(battle_daily_flow)
+
+battle_flw %>%
+  ggplot(aes(Date, X_00060_00003)) +
+  geom_line()
+
+battle_flow <- usgs_clean_monthly_flow(battle_flw, 'BATTLE')
+ggplot(battle_flow, aes(date, mean_flow_cfs)) + geom_col()
+# use_data(battle_flow)
+
+battle_cv <- usgs_get_CV(battle_flw, 'BATTLE')
+# use_data(battle_cv)
+
+# mike wright 5q data
+cl_dates <- read_csv('data-raw/calLite_calSim_date_mapping.csv')
+
+battle_tmp <- read_csv('data-raw/tempmaster.csv', skip = 1) %>%
+  select(`5q_date`, `Battle Creek`) %>%
+  mutate(day_month = str_sub(`5q_date`, 1, 6),
+         year = str_sub(`5q_date`, 8, 9),
+         year = str_c('20', year),
+         date = dmy(paste(day_month, year))) %>%
+  select(-day_month, -year, -`5q_date`) %>%
+  group_by(year = year(date), month = month(date)) %>%
+  summarise(mean_temp_F = mean(`Battle Creek`, na.rm = TRUE),
+            mean_temp_C = (mean_temp_F - 32) * (5/9)) %>%
+  ungroup() %>%
+  mutate(cl_date = ymd(paste(year, month, 1)),
+         screw_trap = 'BATTLE') %>%
+  left_join(cl_dates) %>%
+  select(date = cs_date, mean_temp_C, screw_trap) %>%
+  filter(date >= as.Date('1998-01-01'))
+
+ggplot(battle_tmp, aes(date, mean_temp_C)) + geom_col()
+
+battle_tmp %>% tail
+
+battle_missing <- tibble(
+  date_seq = seq(as.Date('2003-10-01'), as.Date('2016-12-31'), by = 'month'),
+  day = days_in_month(date_seq),
+  date = ymd(paste(year(date_seq), month(date_seq), day)),
+  mean_temp_C = as.numeric(NA),
+  screw_trap = 'BATTLE') %>%
+  select(date, mean_temp_C, screw_trap)
+
+bt_tmp <- battle_tmp %>%
+  bind_rows(battle_missing) %>%
+  arrange(date)
+
+bt_ts <- ts(bt_tmp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+
+na.interp(bt_ts) %>% autoplot(series = 'Interpolated') +
+  forecast::autolayer(bt_ts, series = 'Original')
+
+battle_temp <- bt_tmp %>%
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(bt_ts)), mean_temp_C))
+
+ggplot(battle_temp, aes(date, mean_temp_C)) + geom_col()
+# use_data(battle_temp)
+
+
 # Deer 1992 2010 ---------
+# not using trap because no trail efficiency data
 # USGS 11383500 DEER C NR VINA CA
 # Temperature, water, degrees Celsius 	 1998-10-05 	 2018-04-24
 # Discharge, cubic feet per second 	 1911-10-01 	 2018-04-23
@@ -582,16 +585,16 @@ ggplot(deer_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(deer_flow, overwrite = TRUE)
 
 deer_daily_flow <- usgs_clean_daily_flow(filter(deer_flw, X_00060_00003 < 10000), 'DEER')
-use_data(deer_daily_flow)
+# use_data(deer_daily_flow)
 
 deer_daily_temp <- deer_tmp %>%
   mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'DEER') %>%
   select(date = Date, mean_daily_tempC, screw_trap)
 
-use_data(deer_daily_temp)
+# use_data(deer_daily_temp)
 
 deer_cv <- usgs_get_CV(deer_flw, 'DEER')
-use_data(deer_cv)
+# use_data(deer_cv)
 
 deer_temp <- deer_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002) %>%
@@ -606,8 +609,10 @@ deer_temp <- deer_tmp %>%
   mutate(md = (mx + mn)/2, screw_trap = 'DEER') %>%
   select(date, mean_temp_C = md, screw_trap)
 
-use_data(deer_temp,overwrite = TRUE)
+# use_data(deer_temp,overwrite = TRUE)
 
-# Chipps Trawl 	2008	2011 ***********
+
+# Chipps Trawl 	2008	2011 *********** ----------
 # (corrected assignments)
 # Proposed "Good" fish monitoring data	2008	2018 OR 	2003	2018 ******
+
