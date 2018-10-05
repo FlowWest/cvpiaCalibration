@@ -148,7 +148,9 @@ NULL
 #'   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 #' }
 #'
-#' \strong{NOTE:} Feather temperature data available 2003 - 2016
+#' \strong{NOTE:} Feather temperature data available 2003 - 2006
+#' For the American and Stanislaus Rivers the daily mean temperature
+#' was represented using the mean of the maximum and minimum daily temperature.
 #'
 #' @section Daily Data:
 #' Daily data for flow and temperature are also available: \code{[watershed]_daily_flow}
@@ -160,9 +162,6 @@ NULL
 
 #' @rdname flow_temperature
 "feather_flow"
-
-#' @rdname flow_temperature
-"tuol_flow"
 
 #' @rdname flow_temperature
 "amer_flow"

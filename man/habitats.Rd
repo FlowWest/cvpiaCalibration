@@ -32,13 +32,9 @@ Available screw trap data start and end years:
 
 \tabular{ll}{
   \strong{Location} \tab \strong{start-end}\cr
-  RBDD \tab 1999 - 2016\cr
   Feather River\tab	1998 - 2016\cr
-  Tuolumne River\tab	2007 - 2017\cr
   American River\tab	2013 - 2016\cr
-  Battle Creek\tab	1998 - 2016\cr
   Clear Creek\tab	1998 - 2016\cr
-  Deer Creek\tab 1992 - 2010\cr
   Mokelumne River\tab	1999 - 2015\cr
   Stanislaus River \tab	1998 - 2016
 }

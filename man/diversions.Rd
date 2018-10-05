@@ -2,28 +2,18 @@
 % Please edit documentation in R/data.R
 \docType{data}
 \name{diversions}
-\alias{rbdd_prop_div}
 \alias{feat_prop_div}
-\alias{tuol_prop_div}
 \alias{amer_prop_div}
 \alias{moke_prop_div}
 \alias{stan_prop_div}
-\alias{deer_prop_div}
-\alias{rbdd_tot_div}
 \alias{feat_tot_div}
-\alias{tuol_tot_div}
 \alias{amer_tot_div}
 \alias{moke_tot_div}
 \alias{stan_tot_div}
-\alias{deer_tot_div}
 \title{Proportion and Total Diverted}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 228 rows and 3 columns.}
 \usage{
-rbdd_prop_div
-
 feat_prop_div
-
-tuol_prop_div
 
 amer_prop_div
 
@@ -31,21 +21,13 @@ moke_prop_div
 
 stan_prop_div
 
-deer_prop_div
-
-rbdd_tot_div
-
 feat_tot_div
-
-tuol_tot_div
 
 amer_tot_div
 
 moke_tot_div
 
 stan_tot_div
-
-deer_tot_div
 }
 \description{
 Monthly propotion and total diverted values for the duration of screw trap observations.
@@ -54,13 +36,9 @@ Monthly propotion and total diverted values for the duration of screw trap obser
 Available screw trap data start and end years:
 \tabular{ll}{
   \strong{Location} \tab \strong{start-end}\cr
-  RBDD \tab 1999 - 2016\cr
   Feather River\tab	1998 - 2016\cr
-  Tuolumne River\tab	2007 - 2017\cr
   American River\tab	2013 - 2016\cr
-  Battle Creek\tab	1998 - 2016\cr
   Clear Creek\tab	1998 - 2016\cr
-  Deer Creek\tab 1992 - 2010\cr
   Mokelumne River\tab	1999 - 2015\cr
   Stanislaus River \tab	1998 - 2016
 }
@@ -76,8 +54,7 @@ For more details on CALSIM see:
   \item use this \href{https://flowwest.github.io/cvpiaFlow/reference/proportion_diverted.html}{link} if in a web browser
 }
 
-\strong{NOTE:} RBDD is represented using the Upper Sacramento River DSM model node.
-There are no modeled diversions for Battle and Clear Creek.
+\strong{NOTE:} No major diversions to track for Clear Creek.
 
 Mokelumne data is measured provided by EDMUD
 }

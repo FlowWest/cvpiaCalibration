@@ -2,58 +2,30 @@
 % Please edit documentation in R/data.R
 \docType{data}
 \name{flow_temperature}
-\alias{rbdd_flow}
 \alias{feather_flow}
-\alias{tuol_flow}
 \alias{amer_flow}
 \alias{moke_flow}
 \alias{stan_flow}
-\alias{battle_flow}
 \alias{clear_flow}
-\alias{deer_flow}
-\alias{rbdd_temp}
 \alias{feather_temp}
-\alias{tuol_temp}
 \alias{amer_temp}
 \alias{moke_temp}
 \alias{stan_temp}
-\alias{battle_temp}
 \alias{clear_temp}
-\alias{deer_temp}
-\alias{rbdd_cv}
-\alias{feather_cv}
-\alias{tuol_cv}
-\alias{amer_cv}
-\alias{moke_cv}
-\alias{stan_cv}
-\alias{battle_cv}
-\alias{clear_cv}
-\alias{deer_cv}
-\alias{rbdd_daily_flow}
 \alias{feather_daily_flow}
-\alias{tuol_daily_flow}
 \alias{amer_daily_flow}
 \alias{moke_daily_flow}
 \alias{stan_daily_flow}
-\alias{battle_daily_flow}
 \alias{clear_daily_flow}
-\alias{deer_daily_flow}
-\alias{rbdd_daily_temp}
 \alias{feather_daily_temp}
-\alias{tuol_daily_temp}
 \alias{amer_daily_temp}
 \alias{moke_daily_temp}
 \alias{stan_daily_temp}
 \alias{clear_daily_temp}
-\alias{deer_daily_temp}
-\title{Gaged Flow, Flow Coefficient of Variation, and Temperature}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 216 rows and 3 columns.}
+\title{Gaged Flow and Temperature}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 241 rows and 3 columns.}
 \usage{
-rbdd_flow
-
 feather_flow
-
-tuol_flow
 
 amer_flow
 
@@ -61,17 +33,9 @@ moke_flow
 
 stan_flow
 
-battle_flow
-
 clear_flow
 
-deer_flow
-
-rbdd_temp
-
 feather_temp
-
-tuol_temp
 
 amer_temp
 
@@ -79,35 +43,9 @@ moke_temp
 
 stan_temp
 
-battle_temp
-
 clear_temp
 
-deer_temp
-
-rbdd_cv
-
-feather_cv
-
-tuol_cv
-
-amer_cv
-
-moke_cv
-
-stan_cv
-
-battle_cv
-
-clear_cv
-
-deer_cv
-
-rbdd_daily_flow
-
 feather_daily_flow
-
-tuol_daily_flow
 
 amer_daily_flow
 
@@ -115,17 +53,9 @@ moke_daily_flow
 
 stan_daily_flow
 
-battle_daily_flow
-
 clear_daily_flow
 
-deer_daily_flow
-
-rbdd_daily_temp
-
 feather_daily_temp
-
-tuol_daily_temp
 
 amer_daily_temp
 
@@ -134,25 +64,18 @@ moke_daily_temp
 stan_daily_temp
 
 clear_daily_temp
-
-deer_daily_temp
 }
 \description{
 Measured daily and monthly mean flow (cfs) and temperature (°C) from USGS and CDEC gages
-for the duration of screw trap observations. The coefficient of variation (CV=sd/mean)
-for monthly flow was also calculated.
+for the duration of screw trap observations.
 }
 \details{
 Available screw trap data start and end years:
 \tabular{ll}{
   \strong{Location} \tab \strong{start-end}\cr
-  RBDD \tab 1999 - 2016\cr
   Feather River\tab	1998 - 2016\cr
-  Tuolumne River\tab	2007 - 2017\cr
   American River\tab	2013 - 2016\cr
-  Battle Creek\tab	1998 - 2016\cr
   Clear Creek\tab	1998 - 2016\cr
-  Deer Creek\tab 1992 - 2010\cr
   Mokelumne River\tab	1999 - 2015\cr
   Stanislaus River \tab	1998 - 2016
 }
@@ -162,31 +85,25 @@ Available screw trap data start and end years:
 
 \strong{Flow Gages:}
 \itemize{
-  \item RBDD (Upper Sacramento River) - USGS SACRAMENTO R AB BEND BRIDGE NR RED BLUFF CA (11377100)
   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
-  \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
-  \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
   \item Clear Creek - CDEC CLEAR CREEK NEAR IGO (IGO)
-  \item Deer Creek - USGS DEER C NR VINA CA (11383500)
   \item Mokelumne River - USGS MOKELUMNE R BL CAMANCHE DAM CA (11323500)
   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 }
 
 \strong{Temperature Gages:}
 \itemize{
-  \item RBDD (Upper Sacramento River) - CDEC SACRAMENTO R AT RED BLUFF DIVERSION DAM (RDB)
   \item Feather River - CDEC FEATHER RIVER NEAR GRIDLEY (GRL)
-  \item Tuolumne River - USGS TUOLUMNE R A MODESTO CA (11290000)
   \item American River - USGS AMERICAN R A FAIR OAKS CA (11446500)
-  \item Battle Creek - USGS BATTLE C BL COLEMAN FISH HATCHERY NR COTTONWOOD CA (11376550)
   \item Clear Creek  - CDEC CLEAR CREEK NEAR IGO (IGO)
-  \item Deer Creek - USGS DEER C NR VINA CA (11383500)
   \item Mokelumne River - EDMUD provided data near Victor CA
   \item Stanislaus River - USGS STANISLAUS R A RIPON CA (11303000)
 }
 
-\strong{NOTE:} Deer Creek temperature data begins in 1998
+\strong{NOTE:} Feather temperature data available 2003 - 2006
+For the American and Stanislaus Rivers the daily mean temperature
+was represented using the mean of the maximum and minimum daily temperature.
 }
 
 \section{Daily Data}{

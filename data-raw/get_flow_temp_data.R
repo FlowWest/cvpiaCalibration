@@ -84,7 +84,8 @@ use_data(feather_daily_flow, overwrite = TRUE)
 
 ggplot(filter(feather_tmp, between(parameter_value, 40, 100)), aes(x = datetime, y = parameter_value)) + geom_line()
 
-feather_daily_temp <- cdec_clean_daily_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER')
+feather_daily_temp <- cdec_clean_daily_temp(filter(feather_tmp, between(parameter_value, 40, 100)), 'FEATHER') %>%
+  filter(!is.na(date))
 
 ggplot(feather_daily_temp, aes(date, mean_daily_tempC)) + geom_col()
 
@@ -117,7 +118,8 @@ na.interp(ts_fthr) %>% autoplot(series = 'Interpolated') +
   forecast::autolayer(ts_fthr, series = 'Original')
 
 feather_temp <- fthr_tmp %>%
-  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_fthr)), mean_temp_C))
+  mutate(mean_temp_C = ifelse(is.na(mean_temp_C), as.numeric(na.interp(ts_fthr)), mean_temp_C)) %>%
+  filter(!is.na(date))
 
 use_data(feather_temp, overwrite = TRUE)
 
@@ -347,7 +349,7 @@ ggplot(stan_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(stan_temp, overwrite = TRUE)
 
 
-### DATA FOR TRAPS WE AREN'T USING ### -----------------------------------------
+# DATA FOR TRAPS WE AREN'T USING ### -----------------------------------------
 
 # RBDD	1999	2016------
 # Upper Sacramento not using because of location complications (too many tribs above)
