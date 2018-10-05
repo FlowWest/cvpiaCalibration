@@ -4,6 +4,7 @@ library(CDECRetrieve)
 library(lubridate)
 library(stringr)
 library(devtools)
+library(forecast)
 
 
 # helper functions ------------------------
@@ -120,18 +121,18 @@ feather_temp <- fthr_tmp %>%
 
 use_data(feather_temp, overwrite = TRUE)
 
-# American	2013	2016-----
+# American	2013	2016----- (Adam asked for 2000-2014 spawning habitat)
 # USGS 11446500 AMERICAN R A FAIR OAKS CA
 # Temperature, water, degrees Celsius 	 1961-10-31 	 2018-04-17
 # Discharge, cubic feet per second 	 1904-10-01 	 2018-04-16
 amer_flw <- dataRetrieval::readNWISdv(siteNumbers = '11446500', parameterCd = '00060',
-                                      startDate = '2013-01-01', endDate = '2016-12-31')
+                                      startDate = '2000-01-01', endDate = '2016-12-31')
 amer_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11446500', parameterCd = '00010',
-                                      startDate = '2013-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
+                                      startDate = '2000-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
 
 amer_daily_flow <- usgs_clean_daily_flow(amer_flw, 'AMERICAN')
 ggplot(amer_daily_flow, aes(date, flow_cfs)) + geom_line()
-use_data(amer_daily_flow)
+use_data(amer_daily_flow, overwrite = TRUE)
 
 amer_flw %>%
   ggplot(aes(Date, X_00060_00003)) +
@@ -139,13 +140,15 @@ amer_flw %>%
 
 amer_flow <- usgs_clean_monthly_flow(amer_flw, 'AMERICAN')
 ggplot(amer_flow, aes(date, mean_flow_cfs)) + geom_col()
-use_data(amer_flow)
+use_data(amer_flow, overwrite = TRUE)
 
 amer_daily_temp <- amer_tmp %>%
   mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'AMERICAN') %>%
   select(date = Date, mean_daily_tempC, screw_trap)
 
-use_data(amer_daily_temp)
+ggplot(amer_daily_temp, aes(date, mean_daily_tempC)) + geom_line()
+
+use_data(amer_daily_temp, overwrite = TRUE)
 
 amer_temp <- amer_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
@@ -158,7 +161,7 @@ amer_temp <- amer_tmp %>%
   select(date, mean_temp_C = md, screw_trap)
 
 ggplot(amer_temp, aes(date, mean_temp_C)) + geom_col()
-use_data(amer_temp)
+use_data(amer_temp, overwrite = TRUE)
 
 # Clear	1998	2016------
 # USGS 11372000 CLEAR C NR IGO CA
@@ -173,11 +176,13 @@ clear_flw <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '20', dur_co
 clear_tmp <- CDECRetrieve::cdec_query(station = 'IGO', sensor_num = '25', dur_code = 'H',
                                         start_date = '1997-01-01', end_date = '2016-12-31')
 
-clear_daily_flow <- cdec_clean_daily_flow(clear_flw, 'CLEAR')
+clear_daily_flow <- cdec_clean_daily_flow(clear_flw, 'CLEAR') %>%
+  filter(year(date) > 1996)
 use_data(clear_daily_flow, overwrite = TRUE)
+ggplot(clear_daily_temp, aes(date, mean_daily_tempC)) + geom_line()
 
-clear_daily_temp <- cdec_clean_daily_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
-use_data(clear_daily_temp)
+clear_daily_temp <- cdec_clean_daily_temp(filter(clear_tmp, between(parameter_value, 32, 80), datetime >= as.Date('1997-01-01')), 'CLEAR')
+use_data(clear_daily_temp, overwrite = TRUE)
 
 
 clear_flw %>%
@@ -185,18 +190,18 @@ clear_flw %>%
   ggplot(aes(datetime, parameter_value)) +
   geom_line()
 
-clear_flow <- cdec_clean_monthly_flow(filter(clear_flw, between(parameter_value, 0, 10000), year(datetime) > 1997), 'CLEAR')
+clear_flow <- cdec_clean_monthly_flow(filter(clear_flw, between(parameter_value, 0, 10000), year(datetime) > 1996), 'CLEAR')
 use_data(clear_flow, overwrite = TRUE)
 
 
 clear_tmp %>%
-  filter(between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')) %>%
+  filter(between(parameter_value, 40, 80), datetime >= as.Date('1997-01-01')) %>%
   group_by(date = as_date(datetime)) %>%
   summarise(tt = mean(parameter_value, na.rm = TRUE)) %>%
   ggplot(aes(x = date, y = tt)) +
   geom_col()
 
-clr_tmp <- cdec_clean_monthly_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1998-06-01')), 'CLEAR')
+clr_tmp <- cdec_clean_monthly_temp(filter(clear_tmp, between(parameter_value, 40, 80), datetime >= as.Date('1997-01-01')), 'CLEAR')
 ggplot(clr_tmp, aes(date, mean_temp_C)) + geom_line()
 
 clr_tmp %>%
@@ -206,13 +211,16 @@ clr_tmp %>%
   group_by(year(date)) %>%
   summarise(n())
 
+clr_tmp %>%
+  filter(year(date) == 1998)
+
 clear_tmp <- clr_tmp %>%
-  bind_rows(tibble(date = battle_flow$date[!(battle_flow$date %in% clear_temp$date)],
+  bind_rows(tibble(date = as.Date(c('1998-03-31', '1998-04-30')),
                    mean_temp_C = as.numeric(NA),
                    screw_trap = 'CLEAR')) %>%
   arrange(date)
 
-ts_clr <- ts(clear_tmp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+ts_clr <- ts(clear_tmp$mean_temp_C, start = c(1997, 1), end = c(2016, 12), frequency = 12)
 
 na.interp(ts_clr) %>% autoplot(series = 'Interpolated') +
   forecast::autolayer(ts_clr, series = 'Original')
@@ -227,24 +235,23 @@ clear_temp <- clear_tmp %>%
 use_data(clear_temp, overwrite = TRUE)
 
 
-
 # Mok	1999	2015-----
 # USGS 11323500 MOKELUMNE R BL CAMANCHE DAM CA
 # Discharge, cubic feet per second 	 1904-10-01 	 2017-09-30
 # water temp EBMUD Victor, CA
 moke_flw <- dataRetrieval::readNWISdv(siteNumbers = '11323500', parameterCd = '00060',
-                                      startDate = '1999-01-01', endDate = '2015-12-31')
+                                      startDate = '1998-01-01', endDate = '2015-12-31')
 
 
 moke_daily_flow <- usgs_clean_daily_flow(moke_flw, 'MOKELUMNE')
-use_data(moke_daily_flow)
+use_data(moke_daily_flow, overwrite = TRUE)
 moke_flw %>%
   ggplot(aes(Date, X_00060_00003)) +
   geom_line()
 
 moke_flow <- usgs_clean_monthly_flow(moke_flw, 'MOKELUMNE')
 ggplot(moke_flow, aes(date, mean_flow_cfs)) + geom_col()
-use_data(moke_flow)
+use_data(moke_flow, overwrite = TRUE)
 
 victor <- read_csv('data-raw/Victor15min.csv')
 
@@ -254,7 +261,7 @@ moke_tmp <- victor %>%
   summarise(mean_temp_C = mean(WaterTemperatureCelsius, na.rm = TRUE)) %>%
   ungroup() %>%
   mutate(date = ymd(paste(year, month, day, sep = '-')), screw_trap = 'MOKELUMNE') %>%
-  filter(year > 1998, year < 2016) %>%
+  filter(between(year, 1998, 2015)) %>%
   select(date, mean_temp_C, screw_trap)
 
 moke_daily_temp <- victor %>%
@@ -265,12 +272,12 @@ moke_daily_temp <- victor %>%
   mutate(screw_trap = 'MOKELUMNE') %>%
   select(date, mean_daily_tempC, screw_trap)
 
-use_data(moke_daily_temp)
+use_data(moke_daily_temp, overwrite = TRUE)
 
 moke_tmp %>%
   filter(is.nan(mean_temp_C))
 
-ts_mk <- ts(moke_tmp$mean_temp_C, start = c(1999, 1), end = c(2015, 12), frequency = 12)
+ts_mk <- ts(moke_tmp$mean_temp_C, start = c(1998, 1), end = c(2015, 12), frequency = 12)
 
 na.interp(ts_mk) %>% autoplot(series = 'Interpolated') +
   forecast::autolayer(ts_mk, series = 'Original')
@@ -281,17 +288,14 @@ moke_temp <- moke_tmp %>%
 ggplot(moke_temp, aes(date, mean_temp_C)) + geom_col()
 use_data(moke_temp, overwrite = TRUE)
 
-
-
-
 # Stan	1998	2016-----
 # USGS 11303000 STANISLAUS R A RIPON CA
 # Temperature, water, degrees Celsius 	 1985-07-01 	 2018-04-17
 # Discharge, cubic feet per second 	 1940-10-01 	 2018-04-16
 stan_flw <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '00060',
-                                      startDate = '1998-01-01', endDate = '2016-12-31')
+                                      startDate = '1997-01-01', endDate = '2016-12-31')
 stan_tmp <- dataRetrieval::readNWISdv(siteNumbers = '11303000', parameterCd = '00010',
-                                      startDate = '1998-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
+                                      startDate = '1997-01-01', endDate = '2016-12-31', statCd = c('00001', '00002', '00008'))
 stan_flow %>% tail
 stan_flw %>%
   ggplot(aes(Date, X_00060_00003)) +
@@ -301,13 +305,13 @@ ggplot(stan_flow, aes(date, mean_flow_cfs)) + geom_col()
 use_data(stan_flow, overwrite = TRUE)
 
 stan_daily_flow <- usgs_clean_daily_flow(stan_flw, 'STANISLAUS')
-use_data(stan_daily_flow)
+use_data(stan_daily_flow, overwrite = TRUE)
 
 stan_daily_temp <- stan_tmp %>%
   mutate(mean_daily_tempC = (X_00010_00001 + X_00010_00002)/2, screw_trap = 'STANISLAUS') %>%
   select(date = Date, mean_daily_tempC, screw_trap)
 
-use_data(stan_daily_temp)
+use_data(stan_daily_temp, overwrite = TRUE)
 
 stn_tmp <- stan_tmp %>%
   select(Date, max_temp = X_00010_00001, min_temp = X_00010_00002, med_temp = X_00010_00008) %>%
@@ -323,17 +327,15 @@ stn_tmp %>%
   group_by(year(date)) %>%
   summarise(n())
 
-stn_tmp %>%
-  filter((year(date) == 2000 | year(date) == 2006) & month(date) >=9)
-
-missing_stan <- tibble(date = c(as.Date('2000-12-31'), as.Date('2006-09-30')),
+missing_stan <- tibble(date = as.Date(c('1997-04-30', '1997-05-31','1997-06-30',
+                                        '2000-12-31', '2006-09-30')),
                        mean_temp_C = as.numeric(NA),
                        screw_trap = 'STANISLAUS')
 st_tp <- stn_tmp %>%
   bind_rows(missing_stan) %>%
   arrange(date)
 
-ts_stan <- ts(st_tp$mean_temp_C, start = c(1998, 1), end = c(2016, 12), frequency = 12)
+ts_stan <- ts(st_tp$mean_temp_C, start = c(1997, 1), end = c(2016, 12), frequency = 12)
 
 na.interp(ts_stan) %>% autoplot(series = 'Interpolated') +
   forecast::autolayer(ts_stan, series = 'Original')
