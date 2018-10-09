@@ -77,7 +77,8 @@ feather_tmp <- CDECRetrieve::cdec_query(station = 'GRL', sensor_num = '25', dur_
 ggplot(filter(feather_flw, parameter_value > 0), aes(x = datetime, y = parameter_value)) + geom_line()
 
 feather_daily_flow <- cdec_clean_daily_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
-feather_flow <- cdec_clean_monthly_flow(filter(feather_flw, parameter_value > 0), 'FEATHER')
+feather_flow <- cdec_clean_monthly_flow(filter(feather_flw, parameter_value > 0), 'FEATHER') %>%
+  filter(!is.na(date))
 
 use_data(feather_flow, overwrite = TRUE)
 use_data(feather_daily_flow, overwrite = TRUE)
