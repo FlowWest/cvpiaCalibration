@@ -1,0 +1,11 @@
+river,habitat,rearing_length_mi,length_to_trap_mi,prop_length
+American River,spawning,17.87932222,13.53664767,0.76
+American River,rearing,22.81160102,13.53664767,0.59
+Clear Creek,rearing,7.997036381,6.271823858,0.78
+Clear Creek,spawning,7.997036381,6.271823858,0.78
+Feather River,spawning,18.02306993,18.02306993,1
+Feather River,rearing,64.98259689,32.10564217,0.49
+Mokelumne River,spawning,10.10447035,10.10447035,1
+Mokelumne River,rearing,58.39758715,24.43380802,0.42
+Stanislaus River,rearing,60.31270415,50.6790157,0.84
+Stanislaus River,spawning,25.56767194,25.56767194,1

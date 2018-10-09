@@ -23,7 +23,7 @@
 \alias{stan_daily_temp}
 \alias{clear_daily_temp}
 \title{Gaged Flow and Temperature}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 241 rows and 3 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 240 rows and 3 columns.}
 \usage{
 feather_flow
 

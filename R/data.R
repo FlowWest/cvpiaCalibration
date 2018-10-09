@@ -31,8 +31,8 @@
 #' \strong{NOTE:}
 #' \enumerate{
 #'   \item Feather River does not have habitat values for 1998 because flow data is unavailable.
-#'   \item Only floodplain values at RBDD are suitable, for all other regions apply
-#'   a suitability factor (suggested value = .27).
+#'   \item Habitat values were scaled using the proportion of spawning and rearing extent above the trap.
+#'   \item Apply a suitability factor to floodplain areas (suggested value = .27).
 #' }
 #'
 #' @name habitats
