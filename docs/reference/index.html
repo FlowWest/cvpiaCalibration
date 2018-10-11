@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,12 +56,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">cvpiaCalibration</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">cvpiaCalibration</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.0.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
@@ -64,6 +80,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -71,68 +88,64 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.1.0</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-habitat-datasets" class="hasAnchor"><a href="#section-habitat-datasets" class="anchor"></a>Habitat Datasets</h2>
-            <p class="section-desc"><p>The spawning, instream rearing, and floodplain rearing habitat values at screw trap locations.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="habitats.html">fall_habitats</a></code> <code><a href="habitats.html">spring_habitats</a></code> <code><a href="habitats.html">steelhead_habitats</a></code> </p>
-          </td>
-          <td><p>Spawning and Rearing Habitats</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-flow-and-temperature-datasets" class="hasAnchor"><a href="#section-flow-and-temperature-datasets" class="anchor"></a>Flow and Temperature Datasets</h2>
-            <p class="section-desc"><p>Measured temperature (°C) and flow (cfs) from USGS and CDEC gages for the duration of screw trap observations.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="flow_temperature.html">rbdd_flow</a></code> <code><a href="flow_temperature.html">feather_flow</a></code> <code><a href="flow_temperature.html">tuol_flow</a></code> <code><a href="flow_temperature.html">amer_flow</a></code> <code><a href="flow_temperature.html">moke_flow</a></code> <code><a href="flow_temperature.html">stan_flow</a></code> <code><a href="flow_temperature.html">battle_flow</a></code> <code><a href="flow_temperature.html">clear_flow</a></code> <code><a href="flow_temperature.html">deer_flow</a></code> <code><a href="flow_temperature.html">rbdd_temp</a></code> <code><a href="flow_temperature.html">feather_temp</a></code> <code><a href="flow_temperature.html">tuol_temp</a></code> <code><a href="flow_temperature.html">amer_temp</a></code> <code><a href="flow_temperature.html">moke_temp</a></code> <code><a href="flow_temperature.html">stan_temp</a></code> <code><a href="flow_temperature.html">battle_temp</a></code> <code><a href="flow_temperature.html">clear_temp</a></code> <code><a href="flow_temperature.html">deer_temp</a></code> <code><a href="flow_temperature.html">rbdd_cv</a></code> <code><a href="flow_temperature.html">feather_cv</a></code> <code><a href="flow_temperature.html">tuol_cv</a></code> <code><a href="flow_temperature.html">amer_cv</a></code> <code><a href="flow_temperature.html">moke_cv</a></code> <code><a href="flow_temperature.html">stan_cv</a></code> <code><a href="flow_temperature.html">battle_cv</a></code> <code><a href="flow_temperature.html">clear_cv</a></code> <code><a href="flow_temperature.html">deer_cv</a></code> <code><a href="flow_temperature.html">rbdd_daily_flow</a></code> <code><a href="flow_temperature.html">feather_daily_flow</a></code> <code><a href="flow_temperature.html">tuol_daily_flow</a></code> <code><a href="flow_temperature.html">amer_daily_flow</a></code> <code><a href="flow_temperature.html">moke_daily_flow</a></code> <code><a href="flow_temperature.html">stan_daily_flow</a></code> <code><a href="flow_temperature.html">battle_daily_flow</a></code> <code><a href="flow_temperature.html">clear_daily_flow</a></code> <code><a href="flow_temperature.html">deer_daily_flow</a></code> <code><a href="flow_temperature.html">rbdd_daily_temp</a></code> <code><a href="flow_temperature.html">feather_daily_temp</a></code> <code><a href="flow_temperature.html">tuol_daily_temp</a></code> <code><a href="flow_temperature.html">amer_daily_temp</a></code> <code><a href="flow_temperature.html">moke_daily_temp</a></code> <code><a href="flow_temperature.html">stan_daily_temp</a></code> <code><a href="flow_temperature.html">clear_daily_temp</a></code> <code><a href="flow_temperature.html">deer_daily_temp</a></code> </p>
-          </td>
-          <td><p>Gaged Flow, Flow Coefficient of Variation, and Temperature</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-diversion-datasets" class="hasAnchor"><a href="#section-diversion-datasets" class="anchor"></a>Diversion Datasets</h2>
-            <p class="section-desc"><p>Modeled monthly propotion and total diverted values for the duration of screw trap observations.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="diversions.html">rbdd_prop_div</a></code> <code><a href="diversions.html">feat_prop_div</a></code> <code><a href="diversions.html">tuol_prop_div</a></code> <code><a href="diversions.html">amer_prop_div</a></code> <code><a href="diversions.html">moke_prop_div</a></code> <code><a href="diversions.html">stan_prop_div</a></code> <code><a href="diversions.html">deer_prop_div</a></code> <code><a href="diversions.html">rbdd_tot_div</a></code> <code><a href="diversions.html">feat_tot_div</a></code> <code><a href="diversions.html">tuol_tot_div</a></code> <code><a href="diversions.html">amer_tot_div</a></code> <code><a href="diversions.html">moke_tot_div</a></code> <code><a href="diversions.html">stan_tot_div</a></code> <code><a href="diversions.html">deer_tot_div</a></code> </p>
-          </td>
-          <td><p>Proportion and Total Diverted</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-habitat-datasets" class="hasAnchor"><a href="#section-habitat-datasets" class="anchor"></a>Habitat Datasets</h2>
+          <p class="section-desc"><p>The spawning, instream rearing, and floodplain rearing habitat values at screw trap locations.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="habitats.html">fall_habitats</a></code> <code><a href="habitats.html">spring_habitats</a></code> <code><a href="habitats.html">steelhead_habitats</a></code> </p>
+        </td>
+        <td><p>Spawning and Rearing Habitats</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-flow-and-temperature-datasets" class="hasAnchor"><a href="#section-flow-and-temperature-datasets" class="anchor"></a>Flow and Temperature Datasets</h2>
+          <p class="section-desc"><p>Measured temperature (°C) and flow (cfs) from USGS and CDEC gages for the duration of screw trap observations.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="flow_temperature.html">feather_flow</a></code> <code><a href="flow_temperature.html">amer_flow</a></code> <code><a href="flow_temperature.html">moke_flow</a></code> <code><a href="flow_temperature.html">stan_flow</a></code> <code><a href="flow_temperature.html">clear_flow</a></code> <code><a href="flow_temperature.html">feather_temp</a></code> <code><a href="flow_temperature.html">amer_temp</a></code> <code><a href="flow_temperature.html">moke_temp</a></code> <code><a href="flow_temperature.html">stan_temp</a></code> <code><a href="flow_temperature.html">clear_temp</a></code> <code><a href="flow_temperature.html">feather_daily_flow</a></code> <code><a href="flow_temperature.html">amer_daily_flow</a></code> <code><a href="flow_temperature.html">moke_daily_flow</a></code> <code><a href="flow_temperature.html">stan_daily_flow</a></code> <code><a href="flow_temperature.html">clear_daily_flow</a></code> <code><a href="flow_temperature.html">feather_daily_temp</a></code> <code><a href="flow_temperature.html">amer_daily_temp</a></code> <code><a href="flow_temperature.html">moke_daily_temp</a></code> <code><a href="flow_temperature.html">stan_daily_temp</a></code> <code><a href="flow_temperature.html">clear_daily_temp</a></code> </p>
+        </td>
+        <td><p>Gaged Flow and Temperature</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-diversion-datasets" class="hasAnchor"><a href="#section-diversion-datasets" class="anchor"></a>Diversion Datasets</h2>
+          <p class="section-desc"><p>Modeled monthly propotion and total diverted values for the duration of screw trap observations.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="diversions.html">feat_prop_div</a></code> <code><a href="diversions.html">amer_prop_div</a></code> <code><a href="diversions.html">moke_prop_div</a></code> <code><a href="diversions.html">stan_prop_div</a></code> <code><a href="diversions.html">feat_tot_div</a></code> <code><a href="diversions.html">amer_tot_div</a></code> <code><a href="diversions.html">moke_tot_div</a></code> <code><a href="diversions.html">stan_tot_div</a></code> </p>
+        </td>
+        <td><p>Proportion and Total Diverted</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -151,11 +164,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
