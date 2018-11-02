@@ -11,7 +11,7 @@
 \alias{moke_tot_div}
 \alias{stan_tot_div}
 \title{Proportion and Total Diverted}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 228 rows and 3 columns.}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 240 rows and 3 columns.}
 \usage{
 feat_prop_div
 
