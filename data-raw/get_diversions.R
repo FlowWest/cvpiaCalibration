@@ -16,18 +16,6 @@ wys <- water_years %>%
 seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1
 
 
-# RBDD	1999	2016----
-rbdd_tot_div <- rbdd_prop_div %>%
-  left_join(rbdd_flow) %>%
-  mutate(tot_div = mean_flow_cfs * prop_div) %>%
-  select(date, tot_div, screw_trap)
-
-ggplot(rbdd_tot_div, aes(date, tot_div)) + geom_line()
-
-use_data(rbdd_tot_div, overwrite = TRUE)
-
-# No diversions
-
 # Feather	1998	2016----
 feat_tot_div <- feat_prop_div %>%
   left_join(feather_flow) %>%
@@ -39,15 +27,7 @@ use_data(feat_tot_div, overwrite = TRUE)
 
 ggplot(feat_tot_div, aes(date, tot_div)) + geom_line()
 
-# Tuolumne	2007	2017 ----
-tuol_tot_div <- tuol_prop_div %>%
-  left_join(tuol_flow) %>%
-  mutate(tot_div = mean_flow_cfs * prop_div) %>%
-  select(date, tot_div, screw_trap)
 
-ggplot(tuol_tot_div, aes(date, tot_div)) + geom_line()
-
-use_data(tuol_tot_div, overwrite = TRUE)
 
 # American	2013	2016----
 amer_tot_div <- amer_prop_div %>%
@@ -59,8 +39,6 @@ ggplot(amer_tot_div, aes(date, tot_div)) + geom_line()
 
 use_data(amer_tot_div, overwrite = TRUE)
 
-# Battle	1998	2016----
-# NO diversions
 
 # Clear	1998	2016----
 # NO diversions
@@ -98,6 +76,13 @@ acre_ft_per_day_to_cfs <- function(af_per_day) {
   return(cfs)
 }
 
+acre_ft_per_day_to_cms <- function(af_per_day) {
+  m3_per_day <- af_per_day * 0.0142764101568
+  cms <- m3_per_day / 60 / 60 / 24
+  return(cms)
+}
+
+
 moke_tot_div <- moke %>%
   select(station = Station, date = `Reading Date`, monthly_acre_ft = Reading) %>%
   mutate(date = as.Date(date)) %>%
@@ -110,11 +95,11 @@ moke_tot_div <- moke %>%
   rename(lodi = `Lodi WTP`, rip = `Riparian and Appropriative Diverters`, wid = `Woodbridge Irrigation District Canal`) %>%
   mutate(tot_div_acre_ft = ifelse(is.na(lodi), rip + wid, lodi + rip + wid),
          acre_ft_per_day = tot_div_acre_ft/days_in_month(date),
-         cfs = acre_ft_per_day_to_cfs(acre_ft_per_day),
+         cms = acre_ft_per_day_to_cms(acre_ft_per_day),
          screw_trap = 'MOKELUMNE') %>%
-  select(date, tot_div = cfs, screw_trap)
+  select(date, tot_div_cms = cms, screw_trap)
 
-ggplot(moke_tot_div, aes(date, tot_div)) + geom_col()
+ggplot(moke_tot_div, aes(date, tot_div_cms)) + geom_col()
 
 use_data(moke_tot_div, overwrite = TRUE)
 
@@ -137,3 +122,29 @@ deer_tot_div <- deer_prop_div %>%
 ggplot(deer_tot_div, aes(date, tot_div)) + geom_col()
 
 use_data(deer_tot_div, overwrite = TRUE)
+
+# Not using anymore ------------------
+# RBDD	1999	2016----
+rbdd_tot_div <- rbdd_prop_div %>%
+  left_join(rbdd_flow) %>%
+  mutate(tot_div = mean_flow_cfs * prop_div) %>%
+  select(date, tot_div, screw_trap)
+
+ggplot(rbdd_tot_div, aes(date, tot_div)) + geom_line()
+
+use_data(rbdd_tot_div, overwrite = TRUE)
+
+# No diversions
+
+
+# Tuolumne	2007	2017 ----
+tuol_tot_div <- tuol_prop_div %>%
+  left_join(tuol_flow) %>%
+  mutate(tot_div = mean_flow_cfs * prop_div) %>%
+  select(date, tot_div, screw_trap)
+
+ggplot(tuol_tot_div, aes(date, tot_div)) + geom_line()
+
+use_data(tuol_tot_div, overwrite = TRUE)
+# Battle	1998	2016----
+# NO diversions

@@ -14,43 +14,6 @@ wys <- water_years %>%
 
 seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1
 
-
-# RBDD	1999	2016----
-# No diversions
-cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Upper Sacramento River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  group_by(month = month(date)) %>%
-  mutate(filled = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         WY = ifelse(month(date) %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(filled2 = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div)) %>%
-  filter(year(date) >= 1998) %>%
-  ggplot(aes(x = date, y = filled2, fill = Yr_type)) +
-  geom_col() +
-  geom_vline(xintercept = as.Date('2003-10-31'), size = 1) +
-  scale_fill_brewer(palette = 'RdPu') +
-  theme_dark()
-
-rbdd_prop_div <- cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Upper Sacramento River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  mutate(month = month(date), WY = ifelse(month %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         screw_trap = 'RBDD') %>%
-  filter(year(date) >= 1999) %>%
-  ungroup() %>%
-  select(date, prop_div, screw_trap)
-
-ggplot(rbdd_prop_div, aes(date, prop_div)) + geom_col()
-
-use_data(rbdd_prop_div, overwrite = TRUE)
-
 # Feather	1998	2016----
 cvpiaFlow::proportion_diverted %>%
   select(date, prop_div = `Feather River`) %>%
@@ -78,44 +41,11 @@ feat_prop_div <- cvpiaFlow::proportion_diverted %>%
   group_by(month, Yr_type) %>%
   mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
          screw_trap = 'FEATHER') %>%
-  filter(year(date) >= 1998) %>%
+  filter(year(date) >= 1997) %>%
   ungroup() %>%
   select(date, prop_div, screw_trap)
 
-use_data(feat_prop_div)
-
-# Tuolumne	2007	2017 ----
-cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Tuolumne River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2018-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  group_by(month = month(date)) %>%
-  mutate(filled = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         WY = ifelse(month(date) %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(filled2 = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div)) %>%
-  # filter(year(date) >= 2007) %>%
-  ggplot(aes(x = date, y = filled2, fill = Yr_type)) +
-  geom_col() +
-  geom_vline(xintercept = as.Date('2003-10-31'), size = 1) +
-  scale_fill_brewer(palette = 'RdPu') +
-  theme_dark()
-
-tuol_prop_div <- cvpiaFlow::proportion_diverted %>%
-  select(date, prop_div = `Tuolumne River`) %>%
-  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2018-01-01'), by= 'month')-1,
-                   prop_div = NA)) %>%
-  mutate(month = month(date), WY = ifelse(month %in% 10:12, year(date) + 1, year(date))) %>%
-  left_join(wys) %>%
-  group_by(month, Yr_type) %>%
-  mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
-         screw_trap = 'TUOLUMNE') %>%
-  filter(year(date) >= 2007) %>%
-  ungroup() %>%
-  select(date, prop_div, screw_trap)
-
-use_data(tuol_prop_div)
+use_data(feat_prop_div, overwrite = TRUE)
 
 # American	2013	2016----
 dd <- cvpiaFlow::proportion_diverted %>%
@@ -126,6 +56,8 @@ dd <- cvpiaFlow::proportion_diverted %>%
 
 cor(dd$prop_div, as.numeric(dd$Yr_type), use = 'complete.obs')
 cor(dd$prop_div, as.numeric(dd$month), use = 'complete.obs')
+
+plot(dd$prop_div, as.numeric(dd$Yr_type))
 
 cvpiaFlow::proportion_diverted %>%
   select(date, prop_div = `American River`) %>%
@@ -159,8 +91,6 @@ amer_prop_div <- cvpiaFlow::proportion_diverted %>%
 
 use_data(amer_prop_div)
 
-# Battle	1998	2016----
-# NO diversions
 
 # Clear	1998	2016----
 # NO diversions
@@ -209,7 +139,44 @@ ggplot(stan_prop_div, aes(date, prop_div)) + geom_col()
 
 use_data(stan_prop_div)
 
-# Deer 1992 2010
+# Not using anymore-----------
+# RBDD	1999	2016----
+# No diversions
+cvpiaFlow::proportion_diverted %>%
+  select(date, prop_div = `Upper Sacramento River`) %>%
+  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1,
+                   prop_div = NA)) %>%
+  group_by(month = month(date)) %>%
+  mutate(filled = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
+         WY = ifelse(month(date) %in% 10:12, year(date) + 1, year(date))) %>%
+  left_join(wys) %>%
+  group_by(month, Yr_type) %>%
+  mutate(filled2 = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div)) %>%
+  filter(year(date) >= 1998) %>%
+  ggplot(aes(x = date, y = filled2, fill = Yr_type)) +
+  geom_col() +
+  geom_vline(xintercept = as.Date('2003-10-31'), size = 1) +
+  scale_fill_brewer(palette = 'RdPu') +
+  theme_dark()
+
+rbdd_prop_div <- cvpiaFlow::proportion_diverted %>%
+  select(date, prop_div = `Upper Sacramento River`) %>%
+  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2017-01-01'), by= 'month')-1,
+                   prop_div = NA)) %>%
+  mutate(month = month(date), WY = ifelse(month %in% 10:12, year(date) + 1, year(date))) %>%
+  left_join(wys) %>%
+  group_by(month, Yr_type) %>%
+  mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
+         screw_trap = 'RBDD') %>%
+  filter(year(date) >= 1999) %>%
+  ungroup() %>%
+  select(date, prop_div, screw_trap)
+
+ggplot(rbdd_prop_div, aes(date, prop_div)) + geom_col()
+
+use_data(rbdd_prop_div, overwrite = TRUE)
+
+# Deer 1992 2010----------------
 cvpiaFlow::proportion_diverted %>%
   select(date, prop_div = `Deer Creek`) %>%
   bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2011-01-01'), by= 'month')-1,
@@ -243,3 +210,38 @@ deer_prop_div <- cvpiaFlow::proportion_diverted %>%
 ggplot(deer_prop_div, aes(date, prop_div)) + geom_col()
 
 use_data(deer_prop_div)
+# Tuolumne	2007	2017 ----
+cvpiaFlow::proportion_diverted %>%
+  select(date, prop_div = `Tuolumne River`) %>%
+  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2018-01-01'), by= 'month')-1,
+                   prop_div = NA)) %>%
+  group_by(month = month(date)) %>%
+  mutate(filled = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
+         WY = ifelse(month(date) %in% 10:12, year(date) + 1, year(date))) %>%
+  left_join(wys) %>%
+  group_by(month, Yr_type) %>%
+  mutate(filled2 = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div)) %>%
+  # filter(year(date) >= 2007) %>%
+  ggplot(aes(x = date, y = filled2, fill = Yr_type)) +
+  geom_col() +
+  geom_vline(xintercept = as.Date('2003-10-31'), size = 1) +
+  scale_fill_brewer(palette = 'RdPu') +
+  theme_dark()
+
+tuol_prop_div <- cvpiaFlow::proportion_diverted %>%
+  select(date, prop_div = `Tuolumne River`) %>%
+  bind_rows(tibble(date = seq(as.Date('2003-11-01'), as.Date('2018-01-01'), by= 'month')-1,
+                   prop_div = NA)) %>%
+  mutate(month = month(date), WY = ifelse(month %in% 10:12, year(date) + 1, year(date))) %>%
+  left_join(wys) %>%
+  group_by(month, Yr_type) %>%
+  mutate(prop_div = ifelse(is.na(prop_div), median(prop_div, na.rm = TRUE), prop_div),
+         screw_trap = 'TUOLUMNE') %>%
+  filter(year(date) >= 2007) %>%
+  ungroup() %>%
+  select(date, prop_div, screw_trap)
+
+use_data(tuol_prop_div)
+
+# Battle	1998	2016----
+# NO diversions
