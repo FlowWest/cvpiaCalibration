@@ -31,8 +31,7 @@ get_habitats <- function(df, species, watershed, rst_prop_length) {
                                             life_stage = 'juv',
                                             flow = flows) * rear_scale
 
-  fp <- cvpiaHabitat::acres_to_square_meters(
-    cvpiaHabitat::set_floodplain_habitat(watershed, species, flows)) * rear_scale
+  fp <- cvpiaHabitat::set_floodplain_habitat(watershed, species, flows) * rear_scale
 
   habitat <- data.frame(date = dates,
                         spawn = spawn,
