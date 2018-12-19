@@ -25,6 +25,10 @@ reference:
   desc: Modeled monthly propotion and total diverted values for the duration of screw trap observations.
   contents:
   - diversions
+- title: DSM synthetic year inputs
+  desc: All the model inputs for synthetic years 1998-2017
+  contents:
+  - inputs
 
 navbar:
   type: default
