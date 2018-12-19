@@ -174,6 +174,7 @@ set_synth_years <- function(species) {
          },
          'steelhead' = {
            all_inputs$ST.pools <- run$ST.pools
+           all_inputs$IChab.adult <- run$IChab.adult
          })
 
   return(all_inputs)
@@ -191,7 +192,7 @@ spring_inputs <- set_synth_years('spring')
 use_data(spring_inputs)
 
 steelhead_inputs <- set_synth_years('steelhead')
-use_data(steelhead_inputs)
+use_data(steelhead_inputs, overwrite = TRUE)
 
 # tests------------------
 # expect p.diver of synthetic year 2003 equal to 1993 (year 14 of simulation)
