@@ -152,6 +152,16 @@ set_synth_years <- function(species) {
                      juv.tmp.dlt = juv.tmp.dlt,
                      Dlt.inf = Dlt.inf,
                      DLThab = DLThab,
+                     dlt.gates = dlt.gates,
+                     egg.tmp.eff = egg.tmp.eff,
+                     Dlt.inp =  Dlt.inp,
+                     prop.pulse = prop.pulse,
+                     medQ = medQ,
+                     inps = inps,
+                     IChab.spawn = IChab.spawn,
+                     IChab.fry = IChab.fry,
+                     IChab.juv = IChab.juv,
+                     floodP = floodP,
                      prop.Q.bypasses = prop.Q.bypasses,
                      IChab.bypass = IChab.bypass,
                      floodp.bypass = floodp.bypass,
@@ -183,13 +193,13 @@ set_synth_years <- function(species) {
 
 # create calibration model inputs
 fall_inputs <- set_synth_years('fall')
-use_data(fall_inputs)
+use_data(fall_inputs, overwrite = TRUE)
 
 winter_inputs <- set_synth_years('winter')
-use_data(winter_inputs)
+use_data(winter_inputs, overwrite = TRUE)
 
 spring_inputs <- set_synth_years('spring')
-use_data(spring_inputs)
+use_data(spring_inputs, overwrite = TRUE)
 
 steelhead_inputs <- set_synth_years('steelhead')
 use_data(steelhead_inputs, overwrite = TRUE)
