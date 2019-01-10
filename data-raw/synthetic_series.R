@@ -152,16 +152,6 @@ set_synth_years <- function(species) {
                      juv.tmp.dlt = juv.tmp.dlt,
                      Dlt.inf = Dlt.inf,
                      DLThab = DLThab,
-                     dlt.gates = dlt.gates,
-                     egg.tmp.eff = egg.tmp.eff,
-                     Dlt.inp =  Dlt.inp,
-                     prop.pulse = prop.pulse,
-                     medQ = medQ,
-                     inps = inps,
-                     IChab.spawn = IChab.spawn,
-                     IChab.fry = IChab.fry,
-                     IChab.juv = IChab.juv,
-                     floodP = floodP,
                      prop.Q.bypasses = prop.Q.bypasses,
                      IChab.bypass = IChab.bypass,
                      floodp.bypass = floodp.bypass,
@@ -175,7 +165,12 @@ set_synth_years <- function(species) {
                      egg.tmp.eff = egg.tmp.eff,
                      Dlt.inp = Dlt.inp,
                      prop.pulse = prop.pulse,
-                     medQ = medQ)
+                     medQ = medQ,
+                     inps = inps,
+                     IChab.spawn = IChab.spawn,
+                     IChab.fry = IChab.fry,
+                     IChab.juv = IChab.juv,
+                     floodP = floodP)
 
   switch(species,
          'spring' = {
