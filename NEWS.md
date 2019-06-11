@@ -16,3 +16,10 @@ _10/8/2018_
 _10/8/2018_   
 
 * Updates spring_inputs for synthetic year series to include habitat amounts for Thomes Creek, Calaveras River, Cosumnes River, and Meced River
+
+-----
+
+## cvpiaCalibration 1.0.3
+_10/8/2018_   
+
+* Updates synthetic year series to reflect updated diversion data for Lower-mid Sacramento River

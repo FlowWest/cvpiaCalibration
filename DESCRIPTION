@@ -1,7 +1,7 @@
 Package: cvpiaCalibration
 Type: Package
 Title: Calibration Data
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: person('Sadie', 'Gill',  email = "sgill@flowwest.com", role = c("aut", "cre"))
 Maintainer: Sadie Gill <sgill@flowwest.com>
 Description: This package provides calibration data for the CVPIA salmon life cycle model.
