@@ -23,3 +23,8 @@ _10/8/2018_
 _10/8/2018_   
 
 * Updates synthetic year series to reflect updated diversion data for Lower-mid Sacramento River
+
+## cvpiaCalibration 1.0.4
+_10/8/2018_   
+
+* Updates synthetic year series to reflect updated temperature data for Antelope Creek, Bear Creek, Elder Creek, Paynes Creek, Bear River, Feather River, and Calaveras River
