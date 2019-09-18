@@ -61,6 +61,11 @@ set_synth_years <- function(species) {
   gate.top <- synth_12_21_n(2, run$gate.top)
   fp.weeks <- synth_n_12_20(31, run$fp.weeks)
   DegDay <- synth_n_12_20(31, run$DegDay)
+  aveT20 <- synth_n_12_20(31, run$aveT20)
+  aveT20D <- synth_n_12_20(2, run$aveT20D)
+  maxT24 <- synth_n_12_20(31, run$maxT24)
+  maxT29 <- synth_n_12_20(31, run$maxT29)
+  meanQ <- synth_n_12_20(31, run$meanQ)
 
   retQ <- tibble(
     watershed = run$retQ$watershed,
