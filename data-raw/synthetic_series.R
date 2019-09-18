@@ -61,6 +61,11 @@ set_synth_years <- function(species) {
   gate.top <- synth_12_21_n(2, run$gate.top)
   fp.weeks <- synth_n_12_20(31, run$fp.weeks)
   DegDay <- synth_n_12_20(31, run$DegDay)
+  aveT20 <- synth_n_12_20(31, run$aveT20)
+  aveT20D <- synth_n_12_20(2, run$aveT20D)
+  maxT24 <- synth_n_12_20(31, run$maxT24)
+  maxT29 <- synth_n_12_20(31, run$maxT29)
+  meanQ <- synth_n_12_20(31, run$meanQ)
 
   retQ <- tibble(
     watershed = run$retQ$watershed,
@@ -165,7 +170,17 @@ set_synth_years <- function(species) {
                      egg.tmp.eff = egg.tmp.eff,
                      Dlt.inp = Dlt.inp,
                      prop.pulse = prop.pulse,
-                     medQ = medQ)
+                     medQ = medQ,
+                     inps = inps,
+                     IChab.spawn = IChab.spawn,
+                     IChab.fry = IChab.fry,
+                     IChab.juv = IChab.juv,
+                     floodP = floodP,
+                     aveT20 = aveT20,
+                     aveT20D = aveT20D,
+                     maxT24 = maxT24,
+                     maxT29 = maxT29,
+                     meanQ = meanQ)
 
   switch(species,
          'spring' = {
@@ -183,13 +198,13 @@ set_synth_years <- function(species) {
 
 # create calibration model inputs
 fall_inputs <- set_synth_years('fall')
-use_data(fall_inputs)
+use_data(fall_inputs, overwrite = TRUE)
 
 winter_inputs <- set_synth_years('winter')
-use_data(winter_inputs)
+use_data(winter_inputs, overwrite = TRUE)
 
 spring_inputs <- set_synth_years('spring')
-use_data(spring_inputs)
+use_data(spring_inputs, overwrite = TRUE)
 
 steelhead_inputs <- set_synth_years('steelhead')
 use_data(steelhead_inputs, overwrite = TRUE)
