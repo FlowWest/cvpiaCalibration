@@ -175,7 +175,12 @@ set_synth_years <- function(species) {
                      IChab.spawn = IChab.spawn,
                      IChab.fry = IChab.fry,
                      IChab.juv = IChab.juv,
-                     floodP = floodP)
+                     floodP = floodP,
+                     aveT20 = aveT20,
+                     aveT20D = aveT20D,
+                     maxT24 = maxT24,
+                     maxT29 = maxT29,
+                     meanQ = meanQ)
 
   switch(species,
          'spring' = {
