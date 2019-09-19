@@ -28,3 +28,8 @@ _10/8/2018_
 _10/8/2018_   
 
 * Updates synthetic year series to reflect updated temperature data for Antelope Creek, Bear Creek, Elder Creek, Paynes Creek, Bear River, Feather River, and Calaveras River
+
+## cvpiaCalibration 1.0.5
+_9/19/2019_   
+
+* Adds new temp proportion data, and new meanQ data.
