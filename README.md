@@ -1,3 +1,5 @@
+Development on CVPIA DSM calibration inputs has moved to [Central Valley Project Improvement Act - Open Science Collaborative](https://github.com/CVPIA-OSC). This repository remains posted for archive purposes. The calibration inputs were used to inform FY2019-20 recommendations. Calibration inputs were developed through a formal Structured Decision Making process by the [CVPIA Science Integration Team](http://cvpia.scienceintegrationteam.com/).
+
 ------
 <img src="cvpia_logo.png" align="right" width="40%"/>
 
